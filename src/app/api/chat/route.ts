@@ -1,5 +1,5 @@
-import { mistral } from '@ai-sdk/mistral';
 import { streamText } from 'ai';
+import { streamTextWithFallback, getProviderStatus } from '@/lib/ai-client';
 import { SYSTEM_PROMPT } from './prompt';
 import { getContact } from './tools/getContact';
 import { getCrazy } from './tools/getCrazy';
@@ -32,6 +32,14 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
     console.log('[CHAT-API] Incoming messages:', messages);
 
+    // Log provider status for debugging
+    const providerStatus = getProviderStatus();
+    console.log('[CHAT-API] Provider status:', {
+      primary: providerStatus.primary?.[1]?.name || 'None',
+      availableProviders: providerStatus.availableProviders,
+      fallbackChain: providerStatus.fallbackChain.map(p => p.name)
+    });
+
     messages.unshift(SYSTEM_PROMPT);
 
     const tools = {
@@ -46,12 +54,21 @@ export async function POST(req: Request) {
       getWeather,
     };
 
-    const result = streamText({
-      model: mistral('mistral-large-latest'),
+    const result = await streamTextWithFallback({
       messages,
       toolCallStreaming: true,
       tools,
       maxSteps: 2,
+      onStepFinish: (step) => {
+        console.log('[CHAT-API] Step finished:', {
+          stepType: step.stepType,
+          toolCalls: step.toolCalls?.map((tc: any) => ({
+            toolCallId: tc.toolCallId,
+            toolName: tc.toolName,
+            args: tc.args
+          }))
+        });
+      },
     });
 
     return result.toDataStreamResponse({
