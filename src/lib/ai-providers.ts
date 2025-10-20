@@ -97,12 +97,18 @@ export function getAvailableProviders(): AIProviders {
   return available;
 }
 
-// Get primary provider (first available)
+// Get primary provider based on environment configuration
 export function getPrimaryProvider(): [string, AIProviderConfig] | null {
   const available = getAvailableProviders();
-  const entries = Object.entries(available);
   
-  // Prefer Mistral if available, then OpenAI, then others
+  // Check if AI_PRIMARY_PROVIDER is set in environment
+  const envPrimaryProvider = process.env.AI_PRIMARY_PROVIDER;
+  
+  if (envPrimaryProvider && available[envPrimaryProvider]) {
+    return [envPrimaryProvider, available[envPrimaryProvider]];
+  }
+  
+  // Fallback to preferred order if environment variable is not set or provider not available
   const preferredOrder = ['mistral', 'openai', 'google', 'openrouter', 'anthropic', 'openai-compatible', 'custom'];
   
   for (const provider of preferredOrder) {
@@ -112,6 +118,7 @@ export function getPrimaryProvider(): [string, AIProviderConfig] | null {
   }
   
   // Return first available if none of the preferred ones are available
+  const entries = Object.entries(available);
   return entries.length > 0 ? entries[0] : null;
 }
 
@@ -121,15 +128,36 @@ export function getFallbackChain(startProvider: string): Array<[string, AIProvid
   const chain: Array<[string, AIProviderConfig]> = [];
   const visited = new Set<string>();
   
-  let currentProvider = startProvider;
-  
-  while (currentProvider && available[currentProvider] && !visited.has(currentProvider)) {
-    visited.add(currentProvider);
-    chain.push([currentProvider, available[currentProvider]]);
-    currentProvider = available[currentProvider].fallbackProvider || '';
+  // Add the start provider first if available
+  if (available[startProvider]) {
+    visited.add(startProvider);
+    chain.push([startProvider, available[startProvider]]);
   }
   
-  // Add any remaining providers as final fallbacks
+  // Get fallback providers from environment variable
+  const envFallbackProviders = process.env.AI_FALLBACK_PROVIDERS?.split(',') || [];
+  
+  // Add environment-configured fallback providers
+  for (const provider of envFallbackProviders) {
+    const trimmedProvider = provider.trim();
+    if (available[trimmedProvider] && !visited.has(trimmedProvider)) {
+      visited.add(trimmedProvider);
+      chain.push([trimmedProvider, available[trimmedProvider]]);
+    }
+  }
+  
+  // Follow the traditional fallback chain for any remaining providers
+  let currentProvider = startProvider;
+  while (currentProvider && available[currentProvider] && !visited.has(currentProvider)) {
+    const config = available[currentProvider];
+    if (!visited.has(currentProvider)) {
+      visited.add(currentProvider);
+      chain.push([currentProvider, config]);
+    }
+    currentProvider = config.fallbackProvider || '';
+  }
+  
+  // Add any remaining available providers as final fallbacks
   Object.entries(available).forEach(([key, config]) => {
     if (!visited.has(key)) {
       chain.push([key, config]);
