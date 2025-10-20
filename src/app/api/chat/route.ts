@@ -56,7 +56,7 @@ export async function POST(req: Request) {
 
     const result = await streamTextWithFallback({
       messages,
-      toolCallStreaming: true,
+      toolCallStreaming: true, // AI client will handle OpenAI-Compatible streaming issues
       tools,
       maxSteps: 2,
       onStepFinish: (step) => {
