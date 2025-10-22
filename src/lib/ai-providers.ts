@@ -35,7 +35,7 @@ export const defaultAIProviders: AIProviders = {
   },
   google: {
     name: 'Google Gemini',
-    apiKey: process.env.GOOGLE_API_KEY || '',
+    apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
     models: ['gemini-1.5-pro', 'gemini-1.5-flash', 'gemini-pro'],
     maxTokens: 4000,
     temperature: 0.7,
