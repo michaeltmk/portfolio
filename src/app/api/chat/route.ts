@@ -32,6 +32,38 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
     console.log('[CHAT-API] Incoming messages:', messages);
 
+    // Validate and clean message sequence
+    if (!Array.isArray(messages)) {
+      throw new Error('Messages must be an array');
+    }
+
+    // Basic validation for message structure
+    const validatedMessages = messages.filter((msg, index) => {
+      if (!msg || typeof msg !== 'object') {
+        console.warn(`[CHAT-API] Skipping invalid message at index ${index}:`, msg);
+        return false;
+      }
+      
+      if (!msg.role || !msg.content) {
+        console.warn(`[CHAT-API] Skipping message with missing role/content at index ${index}:`, msg);
+        return false;
+      }
+      
+      // Ensure valid roles
+      if (!['system', 'user', 'assistant', 'tool'].includes(msg.role)) {
+        console.warn(`[CHAT-API] Skipping message with invalid role '${msg.role}' at index ${index}`);
+        return false;
+      }
+      
+      return true;
+    });
+
+    if (validatedMessages.length === 0) {
+      throw new Error('No valid messages provided');
+    }
+
+    console.log(`[CHAT-API] Validated ${validatedMessages.length} out of ${messages.length} messages`);
+
     // Log provider status for debugging
     const providerStatus = getProviderStatus();
     console.log('[CHAT-API] Provider status:', {
@@ -40,7 +72,7 @@ export async function POST(req: Request) {
       fallbackChain: providerStatus.fallbackChain.map(p => p.name)
     });
 
-    messages.unshift(SYSTEM_PROMPT);
+    validatedMessages.unshift(SYSTEM_PROMPT);
 
     const tools = {
       getProjects,
@@ -55,7 +87,7 @@ export async function POST(req: Request) {
     };
 
     const result = await streamTextWithFallback({
-      messages,
+      messages: validatedMessages,
       toolCallStreaming: true, // AI client will handle OpenAI-Compatible streaming issues
       tools,
       maxSteps: 2,
@@ -75,8 +107,38 @@ export async function POST(req: Request) {
       getErrorMessage: errorHandler,
     });
   } catch (err) {
-    console.error('Global error:', err);
+    console.error('Global chat API error:', err);
     const errorMessage = errorHandler(err);
-    return new Response(errorMessage, { status: 500 });
+    
+    // Return appropriate HTTP status codes for different errors
+    let status = 500;
+    let clientMessage = errorMessage;
+    
+    if (typeof errorMessage === 'string') {
+      if (errorMessage.includes('No valid messages') || errorMessage.includes('Messages must be an array')) {
+        status = 400;
+        clientMessage = 'Invalid message format provided';
+      } else if (errorMessage.includes('conversation format') || errorMessage.includes('role')) {
+        status = 422;
+        clientMessage = 'Invalid conversation sequence. Please start a new conversation.';
+      } else if (errorMessage.includes('authentication') || errorMessage.includes('API key')) {
+        status = 503;
+        clientMessage = 'AI service temporarily unavailable';
+      } else if (errorMessage.includes('rate limit') || errorMessage.includes('quota')) {
+        status = 429;
+        clientMessage = 'Rate limit exceeded. Please try again later.';
+      } else if (errorMessage.includes('providers') || errorMessage.includes('unavailable')) {
+        status = 503;
+        clientMessage = 'AI services temporarily unavailable';
+      }
+    }
+    
+    return new Response(
+      JSON.stringify({ error: clientMessage }), 
+      { 
+        status,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
 }

@@ -61,6 +61,44 @@ function createAIModel(providerKey: string, config: AIProviderConfig, modelName?
   }
 }
 
+// Helper function to clean and validate message sequence
+function cleanMessageSequence(messages: any[]): any[] {
+  const cleaned = [];
+  let lastRole = '';
+  
+  for (const msg of messages) {
+    // Skip invalid or incomplete messages
+    if (!msg.role || !msg.content) continue;
+    
+    // Prevent invalid role sequences
+    if (msg.role === 'tool' && lastRole !== 'assistant') {
+      console.warn('[AI-PROVIDER] Skipping tool message without preceding assistant message');
+      continue;
+    }
+    
+    if (msg.role === 'user' && lastRole === 'tool') {
+      console.warn('[AI-PROVIDER] Invalid sequence: user after tool, inserting assistant acknowledgment');
+      // Insert a minimal assistant message to fix the sequence
+      cleaned.push({
+        role: 'assistant',
+        content: 'I understand. Let me help you with that.'
+      });
+    }
+    
+    // Clean the message content for specific providers
+    const cleanedMsg = {
+      role: msg.role,
+      content: typeof msg.content === 'string' ? msg.content : (msg.content?.text || '')
+    };
+    
+    cleaned.push(cleanedMsg);
+    lastRole = msg.role;
+  }
+  
+  console.log('[AI-PROVIDER] Message sequence validation:', cleaned.map(m => m.role).join(' -> '));
+  return cleaned;
+}
+
 // Enhanced streamText with automatic fallback
 export async function streamTextWithFallback(options: {
   messages: any[];
@@ -72,7 +110,7 @@ export async function streamTextWithFallback(options: {
   preferredModel?: string;
 }) {
   const {
-    messages,
+    messages: originalMessages,
     tools,
     maxSteps = 2,
     toolCallStreaming = true,
@@ -80,6 +118,9 @@ export async function streamTextWithFallback(options: {
     preferredProvider,
     preferredModel
   } = options;
+
+  // Clean and validate message sequence
+  const messages = cleanMessageSequence(originalMessages);
 
   // Get the primary provider or use preferred
   const primaryProvider = preferredProvider 
@@ -94,6 +135,8 @@ export async function streamTextWithFallback(options: {
   const fallbackChain = getFallbackChain(primaryProvider[0] || 'mistral');
   
   console.log('[AI-PROVIDER] Available fallback chain:', fallbackChain.map(([key]) => key));
+
+  let lastError: Error | null = null;
 
   // Try each provider in the fallback chain
   for (let i = 0; i < fallbackChain.length; i++) {
@@ -318,12 +361,35 @@ export async function streamTextWithFallback(options: {
       }
 
     } catch (error: any) {
+      lastError = error;
       console.warn(`[AI-PROVIDER] ${config.name} failed:`, error.message);
       
-      // If this is the last provider in the chain, throw the error
+      // Clean error messages for better user experience
+      const isRoleSequenceError = error.message?.includes('role') && 
+                                  (error.message?.includes('user') || error.message?.includes('tool'));
+      
+      if (isRoleSequenceError) {
+        console.warn('[AI-PROVIDER] Role sequence error detected, cleaning messages for next provider');
+        // For role sequence errors, try to clean the conversation even more aggressively
+        const messages = cleanMessageSequence(originalMessages.filter(m => m.role !== 'tool'));
+      }
+      
+      // If this is the last provider in the chain, throw a user-friendly error
       if (i === fallbackChain.length - 1) {
-        console.error('[AI-PROVIDER] All providers failed, throwing error');
-        throw new Error(`All AI providers failed. Last error: ${error.message}`);
+        console.error('[AI-PROVIDER] All providers failed');
+        
+        // Provide a user-friendly error message
+        let errorMessage = 'All AI providers are currently unavailable. Please try again later.';
+        
+        if (isRoleSequenceError) {
+          errorMessage = 'There was an issue with the conversation format. Please start a new conversation.';
+        } else if (lastError?.message?.includes('API key') || lastError?.message?.includes('authentication')) {
+          errorMessage = 'AI service authentication failed. Please check your configuration.';
+        } else if (lastError?.message?.includes('rate limit') || lastError?.message?.includes('quota')) {
+          errorMessage = 'AI service rate limit exceeded. Please try again in a few minutes.';
+        }
+        
+        throw new Error(errorMessage);
       }
       
       // Continue to next provider

@@ -171,8 +171,39 @@ const Chat = () => {
       if (videoRef.current) {
         videoRef.current.pause();
       }
+      
       console.error('Chat error:', error.message, error.cause);
-      toast.error(`Error: ${error.message}`);
+      
+      // Handle specific error types
+      let userFriendlyMessage = error.message;
+      
+      if (error.message?.includes('role') && (error.message?.includes('user') || error.message?.includes('tool'))) {
+        userFriendlyMessage = 'There was an issue with the conversation format. Starting fresh...';
+        // Clear the conversation to start fresh
+        setTimeout(() => {
+          setMessages([]);
+        }, 2000);
+      } else if (error.message?.includes('unavailable') || error.message?.includes('providers')) {
+        userFriendlyMessage = 'AI services are temporarily unavailable. Please try again in a moment.';
+      } else if (error.message?.includes('authentication') || error.message?.includes('API key')) {
+        userFriendlyMessage = 'AI service configuration issue. Please contact support if this persists.';
+      } else if (error.message?.includes('rate limit') || error.message?.includes('quota')) {
+        userFriendlyMessage = 'Too many requests. Please wait a moment before trying again.';
+      }
+      
+      toast.error(`Error: ${userFriendlyMessage}`);
+      
+      // For conversation format errors, automatically retry with a cleaned state
+      if (error.message?.includes('conversation format')) {
+        console.log('Attempting to recover from conversation format error...');
+        setTimeout(() => {
+          // Keep only the last user message and retry
+          const lastUserMessage = messages.findLast(m => m.role === 'user');
+          if (lastUserMessage) {
+            setMessages([lastUserMessage]);
+          }
+        }, 3000);
+      }
     },
     onToolCall: (tool) => {
       const toolName = tool.toolCall.toolName;
@@ -223,10 +254,11 @@ const Chat = () => {
   );
 
   //@ts-ignore
-  const submitQuery = (query) => {
+  const submitQuery = (query, retryCount = 0) => {
     if (!query.trim() || isToolInProgress) return;
     
     const trimmedQuery = query.trim();
+    const maxRetries = 2;
     
     // Check if this exact query is already being processed
     if (loadingSubmit || pendingSubmissionsRef.current.has(trimmedQuery)) {
@@ -238,17 +270,35 @@ const Chat = () => {
     pendingSubmissionsRef.current.add(trimmedQuery);
     setLoadingSubmit(true);
     
-    console.log('Submitting query:', trimmedQuery);
+    console.log(`Submitting query (attempt ${retryCount + 1}):`, trimmedQuery);
     
     // Clear this specific query from pending after 30 seconds as failsafe
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       pendingSubmissionsRef.current.delete(trimmedQuery);
     }, 30000);
     
-    append({
-      role: 'user',
-      content: query,
-    });
+    try {
+      append({
+        role: 'user',
+        content: query,
+      });
+    } catch (error: any) {
+      console.error('Error submitting query:', error);
+      pendingSubmissionsRef.current.delete(trimmedQuery);
+      clearTimeout(timeoutId);
+      setLoadingSubmit(false);
+      
+      // Retry logic for certain types of errors
+      if (retryCount < maxRetries && 
+          (error.message?.includes('role') || error.message?.includes('conversation'))) {
+        console.log(`Retrying query after error (attempt ${retryCount + 2}/${maxRetries + 1})`);
+        setTimeout(() => {
+          submitQuery(query, retryCount + 1);
+        }, 1000 * (retryCount + 1)); // Exponential backoff
+      } else {
+        toast.error(`Failed to submit query: ${error.message}`);
+      }
+    }
   };
 
   useEffect(() => {
