@@ -29,8 +29,9 @@ function errorHandler(error: unknown) {
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const { messages, fallback_number } = await req.json();
     console.log('[CHAT-API] Incoming messages:', messages);
+    console.log('[CHAT-API] Fallback number:', fallback_number);
 
     // Validate and clean message sequence
     if (!Array.isArray(messages)) {
@@ -86,29 +87,128 @@ export async function POST(req: Request) {
       getWeather,
     };
 
-    const result = await streamTextWithFallback({
-      messages: validatedMessages,
-      toolCallStreaming: true, // AI client will handle OpenAI-Compatible streaming issues
-      tools,
-      maxSteps: 2,
-      onStepFinish: (step) => {
-        console.log('[CHAT-API] Step finished:', {
-          stepType: step.stepType,
-          toolCalls: step.toolCalls?.map((tc: any) => ({
-            toolCallId: tc.toolCallId,
-            toolName: tc.toolName,
-            args: tc.args
-          }))
-        });
-      },
+    // Determine which provider to use based on fallback_number
+    let selectedProvider = null;
+    const currentPrimary = process.env.AI_PRIMARY_PROVIDER || 'mistral';
+    const fallbackProviders = (process.env.AI_FALLBACK_PROVIDERS || '').split(',').filter(p => p.trim());
+    
+    if (!fallback_number || fallback_number === 0) {
+      // Use primary provider
+      selectedProvider = currentPrimary;
+      console.log('[CHAT-API] Using primary provider:', selectedProvider);
+    } else {
+      // Use fallback provider based on fallback_number (1-indexed)
+      const fallbackIndex = fallback_number - 1;
+      if (fallbackIndex < fallbackProviders.length) {
+        selectedProvider = fallbackProviders[fallbackIndex].trim();
+        console.log(`[CHAT-API] Using fallback provider #${fallback_number}:`, selectedProvider);
+      } else {
+        console.error(`[CHAT-API] Invalid fallback_number ${fallback_number}, max available: ${fallbackProviders.length}`);
+        throw new Error(`Invalid fallback provider index. Available fallback providers: ${fallbackProviders.length}`);
+      }
+    }
+
+    console.log('[CHAT-API] Provider selection:', {
+      primary: currentPrimary,
+      fallbackProviders: fallbackProviders,
+      selectedProvider: selectedProvider,
+      fallbackNumber: fallback_number
     });
 
+    // First attempt with primary provider
+    let result;
+    try {
+      console.log('[CHAT-API] Attempting with primary provider chain...');
+      result = await streamTextWithFallback({
+        messages: validatedMessages,
+        toolCallStreaming: true,
+        tools,
+        maxSteps: 2,
+        preferredProvider: selectedProvider, // Use the selected provider
+        onStepFinish: (step) => {
+          console.log('[CHAT-API] Step finished:', {
+            stepType: step.stepType,
+            toolCalls: step.toolCalls?.map((tc: any) => ({
+              toolCallId: tc.toolCallId,
+              toolName: tc.toolName,
+              args: tc.args
+            }))
+          });
+        },
+      });
+    } catch (primaryError: any) {
+      console.error('[CHAT-API] Primary provider chain failed:', primaryError.message);
+      console.error('[CHAT-API] Full error object:', JSON.stringify(primaryError, null, 2));
+      
+      // Always attempt fallback for ANY error - let the fallback chain handle it
+      console.log('[CHAT-API] Attempting fallback with next available providers...');
+      
+      // Get the current primary provider to skip it in fallback
+      const currentPrimary = process.env.AI_PRIMARY_PROVIDER || 'mistral';
+      const fallbackProviders = (process.env.AI_FALLBACK_PROVIDERS || '').split(',').filter(p => p.trim());
+      
+      console.log('[CHAT-API] Current primary:', currentPrimary);
+      console.log('[CHAT-API] Available fallback providers:', fallbackProviders);
+      
+      // Try each fallback provider in order
+      for (const fallbackProvider of fallbackProviders) {
+        const trimmedProvider = fallbackProvider.trim();
+        if (trimmedProvider === currentPrimary) {
+          console.log(`[CHAT-API] Skipping ${trimmedProvider} (already failed as primary)`);
+          continue; // Skip the provider that already failed
+        }
+        
+        try {
+          console.log(`[CHAT-API] Trying fallback provider: ${trimmedProvider}`);
+          result = await streamTextWithFallback({
+            messages: validatedMessages,
+            toolCallStreaming: true,
+            tools,
+            maxSteps: 2,
+            preferredProvider: trimmedProvider,
+            onStepFinish: (step) => {
+              console.log(`[CHAT-API] ${trimmedProvider} step finished:`, {
+                stepType: step.stepType,
+                toolCalls: step.toolCalls?.map((tc: any) => ({
+                  toolCallId: tc.toolCallId,
+                  toolName: tc.toolName,
+                  args: tc.args
+                }))
+              });
+            },
+          });
+          console.log(`[CHAT-API] ✅ Successfully recovered using fallback provider: ${trimmedProvider}`);
+          break; // Success! Exit the fallback loop
+        } catch (fallbackError: any) {
+          console.error(`[CHAT-API] Fallback provider ${trimmedProvider} also failed:`, fallbackError.message);
+          // Continue to next provider
+        }
+      }
+      
+      // If we get here and result is still undefined, all providers failed
+      if (!result) {
+        console.error('[CHAT-API] All providers failed, throwing original error');
+        throw primaryError;
+      }
+    }
+
+    console.log('[CHAT-API] AI request completed successfully');
     return result.toDataStreamResponse({
       getErrorMessage: errorHandler,
     });
   } catch (err) {
-    console.error('Global chat API error:', err);
+    console.error('[CHAT-API] Error caught in main handler:', err);
     const errorMessage = errorHandler(err);
+    
+    // Enhanced error logging for debugging
+    if (err instanceof Error) {
+      console.error('[CHAT-API] Error details:', {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,
+        cause: err.cause
+      });
+    }
     
     // Return appropriate HTTP status codes for different errors
     let status = 500;

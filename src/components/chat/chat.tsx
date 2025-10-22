@@ -126,6 +126,7 @@ const Chat = () => {
   const [autoSubmitted, setAutoSubmitted] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [isTalking, setIsTalking] = useState(false);
+  const [fallbackNumber, setFallbackNumber] = useState(0); // 0 = primary, 1+ = fallback providers
   
   // Track pending submissions to prevent duplicates
   const pendingSubmissionsRef = useRef(new Set<string>());
@@ -143,7 +144,12 @@ const Chat = () => {
     addToolResult,
     append,
   } = useChat({
+    api: '/api/chat',
+    body: () => ({
+      fallback_number: fallbackNumber, // Dynamic function to get current fallback number
+    }),
     onResponse: (response) => {
+      console.log(`[CHAT-CLIENT] Response received with fallback_number: ${fallbackNumber}`);
       if (response) {
         setLoadingSubmit(false);
         setIsTalking(true);
@@ -159,6 +165,8 @@ const Chat = () => {
       setIsTalking(false);
       // Clear pending submissions when finished
       pendingSubmissionsRef.current.clear();
+      // Reset fallback number on successful completion
+      setFallbackNumber(0);
       if (videoRef.current) {
         videoRef.current.pause();
       }
@@ -172,7 +180,20 @@ const Chat = () => {
         videoRef.current.pause();
       }
       
+      // Enhanced client-side error logging
       console.error('Chat error:', error.message, error.cause);
+      console.error('Full error object:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        cause: error.cause,
+        timestamp: new Date().toISOString()
+      });
+      
+      // Log additional context if available
+      if (error.cause && typeof error.cause === 'object') {
+        console.error('Error cause details:', error.cause);
+      }
       
       // Handle specific error types
       let userFriendlyMessage = error.message;
@@ -187,8 +208,74 @@ const Chat = () => {
         userFriendlyMessage = 'AI services are temporarily unavailable. Please try again in a moment.';
       } else if (error.message?.includes('authentication') || error.message?.includes('API key')) {
         userFriendlyMessage = 'AI service configuration issue. Please contact support if this persists.';
-      } else if (error.message?.includes('rate limit') || error.message?.includes('quota')) {
-        userFriendlyMessage = 'Too many requests. Please wait a moment before trying again.';
+      } else if (error.message?.includes('rate limit') || error.message?.includes('quota') || error.message?.includes('capacity exceeded') || error.message?.includes('Service tier capacity')) {
+        userFriendlyMessage = 'Service capacity exceeded. Trying alternative providers...';
+        console.log('Capacity/quota error detected, attempting fallback to next provider');
+        
+        // Auto-retry with next fallback provider
+        const maxFallbacks = 3; // Adjust based on your fallback providers count
+        if (fallbackNumber < maxFallbacks) {
+          const nextFallback = fallbackNumber + 1;
+          console.log(`Auto-retrying with fallback provider #${nextFallback} (current was ${fallbackNumber})`);
+          
+          // Update fallback number first
+          setFallbackNumber(nextFallback);
+          
+          // Retry the last user message with the new provider
+          const lastUserMessage = messages.findLast(m => m.role === 'user');
+          if (lastUserMessage) {
+            setTimeout(() => {
+              // Remove the failed assistant message if it exists
+              const filteredMessages = messages.filter(m => !(m.role === 'assistant' && m.content === ''));
+              setMessages(filteredMessages);
+              
+              // Re-submit with the new fallback provider
+              // The body function should now use the updated fallbackNumber
+              console.log(`Re-submitting with updated fallback_number: ${nextFallback}`);
+              append({
+                role: 'user',
+                content: lastUserMessage.content,
+              });
+            }, 1000);
+          }
+          return; // Don't show toast error for auto-retry
+        } else {
+          userFriendlyMessage = 'All AI providers are currently experiencing capacity issues. Please try again later.';
+          setFallbackNumber(0); // Reset for next conversation
+        }
+      } else if (error.message?.includes('Failed after') && error.message?.includes('attempts')) {
+        userFriendlyMessage = 'Multiple retry attempts failed. Switching to alternative AI providers...';
+        console.log('Retry failure detected, attempting fallback to next provider');
+        
+        // Auto-retry with next fallback provider
+        const maxFallbacks = 3;
+        if (fallbackNumber < maxFallbacks) {
+          const nextFallback = fallbackNumber + 1;
+          console.log(`Auto-retrying with fallback provider #${nextFallback} (current was ${fallbackNumber})`);
+          setFallbackNumber(nextFallback);
+          
+          // Retry the last user message with the new provider
+          const lastUserMessage = messages.findLast(m => m.role === 'user');
+          if (lastUserMessage) {
+            setTimeout(() => {
+              // Remove the failed assistant message if it exists
+              const filteredMessages = messages.filter(m => !(m.role === 'assistant' && m.content === ''));
+              setMessages(filteredMessages);
+              
+              // Re-submit with the new fallback provider
+              // The body function should now use the updated fallbackNumber
+              console.log(`Re-submitting with updated fallback_number: ${nextFallback}`);
+              append({
+                role: 'user',
+                content: lastUserMessage.content,
+              });
+            }, 1000);
+          }
+          return; // Don't show toast error for auto-retry
+        } else {
+          userFriendlyMessage = 'All AI providers failed to respond. Please try again later.';
+          setFallbackNumber(0); // Reset for next conversation
+        }
       }
       
       toast.error(`Error: ${userFriendlyMessage}`);

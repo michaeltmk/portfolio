@@ -6,6 +6,48 @@ import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { streamText, generateText, createDataStreamResponse } from 'ai';
 import { AIProviderConfig, getFallbackChain, getPrimaryProvider } from './ai-providers';
 
+// Debug mode for enhanced logging
+const DEBUG_AI = process.env.DEBUG_AI === 'true' || process.env.NODE_ENV === 'development';
+
+// Enhanced fetch wrapper for API calls with raw response logging
+async function debugFetch(url: string, options: RequestInit, providerName: string): Promise<Response> {
+  if (DEBUG_AI) {
+    console.log(`[AI-DEBUG] ${providerName} - Making request to:`, url);
+    console.log(`[AI-DEBUG] ${providerName} - Request options:`, {
+      method: options.method,
+      headers: options.headers,
+      bodyLength: options.body ? (options.body as string).length : 0
+    });
+  }
+  
+  const startTime = Date.now();
+  const response = await fetch(url, options);
+  const duration = Date.now() - startTime;
+  
+  if (DEBUG_AI) {
+    console.log(`[AI-DEBUG] ${providerName} - Response received:`, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: Object.fromEntries(response.headers.entries()),
+      duration: `${duration}ms`,
+      url: response.url
+    });
+  }
+  
+  // Clone response to read body for logging without consuming the original
+  if (DEBUG_AI && !response.ok) {
+    const clonedResponse = response.clone();
+    try {
+      const errorBody = await clonedResponse.text();
+      console.error(`[AI-DEBUG] ${providerName} - Error response body:`, errorBody);
+    } catch (e) {
+      console.error(`[AI-DEBUG] ${providerName} - Could not read error response body:`, e);
+    }
+  }
+  
+  return response;
+}
+
 // Create AI model instances
 function createAIModel(providerKey: string, config: AIProviderConfig, modelName?: string) {
   const model = modelName || config.models[0];
@@ -171,21 +213,26 @@ export async function streamTextWithFallback(options: {
             console.log(`[AI-PROVIDER] Direct API call to:`, config.baseURL);
             console.log(`[AI-PROVIDER] Payload:`, JSON.stringify(payload, null, 2));
             
-            const response = await fetch(`${config.baseURL}/chat/completions`, {
+            const response = await debugFetch(`${config.baseURL}/chat/completions`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${config.apiKey}`
               },
               body: JSON.stringify(payload)
-            });
+            }, config.name);
             
             if (!response.ok) {
               throw new Error(`API request failed: ${response.status} ${response.statusText}`);
             }
             
             const data = await response.json();
-            console.log(`[AI-PROVIDER] Raw API response:`, JSON.stringify(data, null, 2));
+            
+            if (DEBUG_AI) {
+              console.log(`[AI-DEBUG] ${config.name} - Raw API response:`, JSON.stringify(data, null, 2));
+            } else {
+              console.log(`[AI-PROVIDER] Raw API response:`, JSON.stringify(data, null, 2));
+            }
             
             const content = data.choices?.[0]?.message?.content || '';
             console.log(`[AI-PROVIDER] Extracted content:`, content);
@@ -258,6 +305,32 @@ export async function streamTextWithFallback(options: {
             
           } catch (error) {
             console.error(`[AI-PROVIDER] Direct API error for ${config.name}:`, error);
+            
+            // Enhanced error logging with raw response if available
+            if (error instanceof Error) {
+              console.error(`[AI-PROVIDER] Error details:`, {
+                message: error.message,
+                stack: error.stack,
+                name: error.name,
+                cause: error.cause
+              });
+            }
+            
+            // If this was a fetch error, try to get the raw response
+            if (typeof error === 'object' && error !== null) {
+              const errorObj = error as any;
+              if (errorObj.response) {
+                console.error(`[AI-PROVIDER] Raw response status:`, errorObj.response.status);
+                console.error(`[AI-PROVIDER] Raw response headers:`, errorObj.response.headers);
+                try {
+                  const rawBody = await errorObj.response.text();
+                  console.error(`[AI-PROVIDER] Raw response body:`, rawBody);
+                } catch (bodyError) {
+                  console.error(`[AI-PROVIDER] Could not read response body:`, bodyError);
+                }
+              }
+            }
+            
             // Fall back to next provider
             continue;
           }
@@ -269,6 +342,7 @@ export async function streamTextWithFallback(options: {
           messages,
           tools,
           maxSteps,
+          maxRetries: 0, // Disable built-in retries to allow our fallback system to work
           maxTokens: config.maxTokens,
           temperature: config.temperature,
         });
@@ -341,6 +415,7 @@ export async function streamTextWithFallback(options: {
           toolCallStreaming,
           tools,
           maxSteps,
+          maxRetries: 0, // Disable built-in retries to allow our fallback system to work
           onStepFinish: (step) => {
             console.log(`[AI-PROVIDER] ${config.name} - Step finished:`, {
               stepType: step.stepType,
@@ -351,6 +426,14 @@ export async function streamTextWithFallback(options: {
               }))
             });
             onStepFinish?.(step);
+          },
+          onFinish: (result) => {
+            console.log(`[AI-PROVIDER] ${config.name} - Final result:`, {
+              finishReason: result.finishReason,
+              usage: result.usage,
+              warnings: result.warnings,
+              experimental_providerMetadata: result.experimental_providerMetadata
+            });
           },
           maxTokens: config.maxTokens,
           temperature: config.temperature,
@@ -364,9 +447,70 @@ export async function streamTextWithFallback(options: {
       lastError = error;
       console.warn(`[AI-PROVIDER] ${config.name} failed:`, error.message);
       
+      // Enhanced error logging with raw response details
+      console.error(`[AI-PROVIDER] Detailed error for ${config.name}:`, {
+        providerKey,
+        errorName: error.name,
+        errorMessage: error.message,
+        errorStack: error.stack,
+        errorCause: error.cause,
+        timestamp: new Date().toISOString()
+      });
+      
+      // Log raw response if available (for API errors)
+      if (error.response) {
+        console.error(`[AI-PROVIDER] Raw HTTP response:`, {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          headers: Object.fromEntries(error.response.headers || []),
+          url: error.response.url
+        });
+        
+        // Try to get response body if it exists
+        try {
+          if (error.response.data) {
+            console.error(`[AI-PROVIDER] Response data:`, error.response.data);
+          } else if (error.response.text) {
+            const responseText = await error.response.text();
+            console.error(`[AI-PROVIDER] Response text:`, responseText);
+          }
+        } catch (bodyError) {
+          console.error(`[AI-PROVIDER] Could not read response body:`, bodyError);
+        }
+      }
+      
+      // Log provider-specific error details
+      if (error.code) {
+        console.error(`[AI-PROVIDER] Error code: ${error.code}`);
+      }
+      
+      if (error.type) {
+        console.error(`[AI-PROVIDER] Error type: ${error.type}`);
+      }
+      
+      // Log request details for debugging
+      console.error(`[AI-PROVIDER] Request context:`, {
+        provider: config.name,
+        model: preferredModel || config.models?.[0],
+        messageCount: messages.length,
+        hasTools: Boolean(tools),
+        maxSteps,
+        toolCallStreaming
+      });
+      
       // Clean error messages for better user experience
       const isRoleSequenceError = error.message?.includes('role') && 
                                   (error.message?.includes('user') || error.message?.includes('tool'));
+      
+      const isCapacityError = error.message?.includes('capacity exceeded') || 
+                              error.message?.includes('Service tier capacity') ||
+                              error.message?.includes('quota exceeded') ||
+                              error.message?.includes('rate limit') ||
+                              error.message?.includes('Rate limit');
+      
+      if (isCapacityError) {
+        console.warn(`[AI-PROVIDER] Capacity/quota error detected for ${config.name}, falling back immediately`);
+      }
       
       if (isRoleSequenceError) {
         console.warn('[AI-PROVIDER] Role sequence error detected, cleaning messages for next provider');

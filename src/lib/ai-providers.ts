@@ -36,7 +36,7 @@ export const defaultAIProviders: AIProviders = {
   google: {
     name: 'Google Gemini',
     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
-    models: ['gemini-1.5-pro', 'gemini-1.5-flash', 'gemini-pro'],
+    models: ['gemini-2.5-pro', 'gemini-1.5-flash', 'gemini-pro'],
     maxTokens: 4000,
     temperature: 0.7,
     fallbackProvider: 'openrouter'
@@ -46,11 +46,7 @@ export const defaultAIProviders: AIProviders = {
     baseURL: 'https://openrouter.ai/api/v1',
     apiKey: process.env.OPENROUTER_API_KEY || '',
     models: [
-      'anthropic/claude-3.5-sonnet',
-      'openai/gpt-4o',
-      'google/gemini-pro-1.5',
-      'meta-llama/llama-3.2-90b-instruct',
-      'mistralai/mistral-large'
+      'deepseek/deepseek-r1:free'
     ],
     maxTokens: 4000,
     temperature: 0.7,
