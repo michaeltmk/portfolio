@@ -234,7 +234,11 @@ export async function POST(req: Request) {
     }
     
     return new Response(
-      JSON.stringify({ error: clientMessage }), 
+      JSON.stringify({ 
+        error: clientMessage,
+        status: status,
+        fallback_available: status >= 500 // Indicate to client that fallback should be tried
+      }), 
       { 
         status,
         headers: { 'Content-Type': 'application/json' }

@@ -1,5 +1,5 @@
 'use client';
-import { useChat } from '@ai-sdk/react';
+import { useChat, type Message } from '@ai-sdk/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
@@ -127,9 +127,98 @@ const Chat = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [isTalking, setIsTalking] = useState(false);
   const [fallbackNumber, setFallbackNumber] = useState(0); // 0 = primary, 1+ = fallback providers
+  const [responseTimeoutId, setResponseTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [isRetrying, setIsRetrying] = useState(false); // Prevent multiple simultaneous retries
   
   // Track pending submissions to prevent duplicates
   const pendingSubmissionsRef = useRef(new Set<string>());
+  
+  // Track current fallback number for immediate access in callbacks
+  const fallbackNumberRef = useRef(0);
+  
+  // Sync ref with state changes
+  useEffect(() => {
+    fallbackNumberRef.current = fallbackNumber;
+    console.log(`[CHAT-CLIENT] Fallback number updated: state=${fallbackNumber}, ref=${fallbackNumberRef.current}`);
+  }, [fallbackNumber]);
+
+  // Helper function to check if we should try fallback (simplified - fallback for any error)
+  const shouldTriggerFallback = (error: Error): boolean => {
+    // Only skip fallback for specific conversation format errors that need special handling
+    if (error.message?.includes('role') && (error.message?.includes('user') || error.message?.includes('tool'))) {
+      console.log('Conversation format error - not triggering fallback, needs conversation reset');
+      return false;
+    }
+    
+    // For any other error, try fallback
+    console.log('Error detected, will try fallback:', error.message);
+    return true;
+  };
+
+  // Helper function to handle provider errors and trigger fallback
+  const handleProviderError = (error: Error) => {
+    console.log('[CHAT-CLIENT] Handling provider error:', error.message);
+    
+    // Prevent multiple simultaneous retries
+    if (isRetrying) {
+      console.log('[CHAT-CLIENT] Already retrying, skipping duplicate error handling');
+      return false;
+    }
+    
+    // Try fallback for ANY error (except conversation format errors which are handled separately)
+    const maxFallbacks = 3;
+    const currentFallback = fallbackNumberRef.current;
+    
+    if (currentFallback < maxFallbacks) {
+      const nextFallback = currentFallback + 1;
+      console.log(`Auto-retrying with fallback provider #${nextFallback} (current was ${currentFallback})`);
+      console.log(`Error that triggered fallback: ${error.message}`);
+      
+      setIsRetrying(true);
+      
+      // Update both state and ref
+      setFallbackNumber(nextFallback);
+      fallbackNumberRef.current = nextFallback;
+      
+      // Retry the last user message with the new provider
+      const lastUserMessage = messages.findLast(m => m.role === 'user');
+      if (lastUserMessage) {
+        setTimeout(() => {
+          console.log(`Re-submitting with fallback_number: ${nextFallback}`);
+          console.log('Current messages before retry:', messages.map(m => ({ role: m.role, content: m.content?.substring(0, 50) })));
+          
+          // Remove any failed assistant messages and ensure we have a clean user message
+          const filteredMessages = messages.filter(m => {
+            // Keep all user messages and successful assistant messages
+            return m.role === 'user' || (m.role === 'assistant' && m.content && m.content.trim() !== '');
+          });
+          
+          console.log('Filtered messages for retry:', filteredMessages.map(m => ({ role: m.role, content: m.content?.substring(0, 50) })));
+          
+          // Set the filtered messages and trigger reload
+          setMessages(filteredMessages);
+          
+          // Use reload to trigger a fresh request with the updated fallback number
+          setTimeout(() => {
+            console.log(`Calling reload() with fallbackNumberRef.current: ${fallbackNumberRef.current}`);
+            reload();
+          }, 100);
+          
+          setIsRetrying(false);
+        }, 1500); // Slightly longer delay to ensure state update
+      } else {
+        setIsRetrying(false);
+      }
+      return true; // Indicates fallback was triggered
+    } else {
+      console.log('All fallback providers exhausted');
+      setFallbackNumber(0); // Reset for next conversation
+      fallbackNumberRef.current = 0;
+      setIsRetrying(false);
+      toast.error('All AI providers are currently experiencing issues. Please try again later.');
+      return false;
+    }
+  };
 
   const {
     messages,
@@ -145,12 +234,73 @@ const Chat = () => {
     append,
   } = useChat({
     api: '/api/chat',
-    body: () => ({
-      fallback_number: fallbackNumber, // Dynamic function to get current fallback number
-    }),
-    onResponse: (response) => {
-      console.log(`[CHAT-CLIENT] Response received with fallback_number: ${fallbackNumber}`);
+    body: {
+      fallback_number: fallbackNumberRef.current,
+    },
+    onResponse: async (response) => {
+      console.log(`[CHAT-CLIENT] Response received with fallback_number: ${fallbackNumberRef.current}`);
+      console.log(`[CHAT-CLIENT] Response status: ${response.status}`);
+      console.log(`[CHAT-CLIENT] Response headers:`, Object.fromEntries(response.headers.entries()));
+      
+      // Clear any existing timeout
+      if (responseTimeoutId) {
+        clearTimeout(responseTimeoutId);
+        setResponseTimeoutId(null);
+      }
+      
       if (response) {
+        // Check if response is actually an error disguised as 200
+        if (response.status >= 400) {
+          console.log(`[CHAT-CLIENT] Error response detected: ${response.status}`);
+          return; // Let onError handle it
+        }
+        
+        // Check response content type to ensure it's the expected format
+        const contentType = response.headers.get('content-type');
+        console.log(`[CHAT-CLIENT] Content-Type: ${contentType}`);
+        
+        // For streaming responses, we expect text/plain with AI data stream
+        const isValidStreamFormat = contentType?.includes('text/plain') && 
+                                   response.headers.get('X-Vercel-AI-Data-Stream');
+        
+        if (!isValidStreamFormat) {
+          console.warn(`[CHAT-CLIENT] Unexpected response format. Content-Type: ${contentType}`);
+          
+          // Try to read the response body to check for errors
+          try {
+            const responseClone = response.clone();
+            const text = await responseClone.text();
+            console.log(`[CHAT-CLIENT] Response body preview:`, text.substring(0, 200));
+            
+            // Check if it's actually an error response or empty/malformed
+            if (text.includes('error') || text.includes('Error') || text.length < 10) {
+              console.log('[CHAT-CLIENT] Detected malformed response, triggering fallback');
+              
+              // Manually trigger the error handling
+              const artificialError = new Error(`Invalid response format from provider. Content-Type: ${contentType}, Body: ${text.substring(0, 100)}`);
+              (artificialError as any).status = 502; // Bad Gateway - provider returned invalid format
+              
+              // Call the error handler manually
+              setTimeout(() => {
+                handleProviderError(artificialError);
+              }, 100);
+              return;
+            }
+          } catch (readError) {
+            console.error('[CHAT-CLIENT] Could not read response body:', readError);
+          }
+        }
+        
+        // Set up a timeout to detect hanging responses
+        const timeoutId = setTimeout(() => {
+          console.log('[CHAT-CLIENT] Response timeout detected - no content received within 30 seconds');
+          const timeoutError = new Error('Response timeout - provider is not responding');
+          (timeoutError as any).status = 504; // Gateway Timeout
+          handleProviderError(timeoutError);
+        }, 30000); // 30 second timeout
+        
+        setResponseTimeoutId(timeoutId);
+        
         setLoadingSubmit(false);
         setIsTalking(true);
         if (videoRef.current) {
@@ -160,13 +310,44 @@ const Chat = () => {
         }
       }
     },
-    onFinish: () => {
+    onFinish: (message) => {
+      console.log('[CHAT-CLIENT] Message finished:', message);
+      
+      // Clear any response timeout
+      if (responseTimeoutId) {
+        clearTimeout(responseTimeoutId);
+        setResponseTimeoutId(null);
+      }
+      
       setLoadingSubmit(false);
       setIsTalking(false);
       // Clear pending submissions when finished
       pendingSubmissionsRef.current.clear();
-      // Reset fallback number on successful completion
+      
+      // Check if the message is actually empty or malformed
+      if (!message || !message.content || message.content.trim() === '') {
+        console.warn('[CHAT-CLIENT] Received empty or malformed message on finish');
+        
+        // Only trigger fallback if we're not already retrying and haven't exhausted fallbacks
+        if (!isRetrying && fallbackNumberRef.current < 3) {
+          const emptyResponseError = new Error('Provider returned empty response');
+          (emptyResponseError as any).status = 502;
+          
+          // Don't reset fallback number yet, trigger fallback first
+          setTimeout(() => {
+            handleProviderError(emptyResponseError);
+          }, 500);
+        } else {
+          console.log('[CHAT-CLIENT] Skipping fallback for empty response - already retrying or exhausted');
+        }
+        return;
+      }
+      
+      // Only reset fallback number on successful completion with content
       setFallbackNumber(0);
+      fallbackNumberRef.current = 0;
+      setIsRetrying(false); // Reset retry flag on success
+      
       if (videoRef.current) {
         videoRef.current.pause();
       }
@@ -174,6 +355,13 @@ const Chat = () => {
     onError: (error) => {
       setLoadingSubmit(false);
       setIsTalking(false);
+      
+      // Clear any response timeout
+      if (responseTimeoutId) {
+        clearTimeout(responseTimeoutId);
+        setResponseTimeoutId(null);
+      }
+      
       // Clear pending submissions on error
       pendingSubmissionsRef.current.clear();
       if (videoRef.current) {
@@ -187,6 +375,9 @@ const Chat = () => {
         message: error.message,
         stack: error.stack,
         cause: error.cause,
+        status: (error as any).status,
+        statusCode: (error as any).statusCode,
+        code: (error as any).code,
         timestamp: new Date().toISOString()
       });
       
@@ -195,93 +386,34 @@ const Chat = () => {
         console.error('Error cause details:', error.cause);
       }
       
-      // Handle specific error types
-      let userFriendlyMessage = error.message;
+      // Log current fallback state for debugging
+      console.log('Current fallback state:', {
+        fallbackNumber,
+        maxFallbacks: 3,
+        canRetry: fallbackNumber < 3
+      });
       
+      // Handle conversation format errors separately (don't trigger fallback)
       if (error.message?.includes('role') && (error.message?.includes('user') || error.message?.includes('tool'))) {
-        userFriendlyMessage = 'There was an issue with the conversation format. Starting fresh...';
+        toast.error('There was an issue with the conversation format. Starting fresh...');
         // Clear the conversation to start fresh
         setTimeout(() => {
           setMessages([]);
         }, 2000);
-      } else if (error.message?.includes('unavailable') || error.message?.includes('providers')) {
-        userFriendlyMessage = 'AI services are temporarily unavailable. Please try again in a moment.';
-      } else if (error.message?.includes('authentication') || error.message?.includes('API key')) {
-        userFriendlyMessage = 'AI service configuration issue. Please contact support if this persists.';
-      } else if (error.message?.includes('rate limit') || error.message?.includes('quota') || error.message?.includes('capacity exceeded') || error.message?.includes('Service tier capacity')) {
-        userFriendlyMessage = 'Service capacity exceeded. Trying alternative providers...';
-        console.log('Capacity/quota error detected, attempting fallback to next provider');
-        
-        // Auto-retry with next fallback provider
-        const maxFallbacks = 3; // Adjust based on your fallback providers count
-        if (fallbackNumber < maxFallbacks) {
-          const nextFallback = fallbackNumber + 1;
-          console.log(`Auto-retrying with fallback provider #${nextFallback} (current was ${fallbackNumber})`);
-          
-          // Update fallback number first
-          setFallbackNumber(nextFallback);
-          
-          // Retry the last user message with the new provider
-          const lastUserMessage = messages.findLast(m => m.role === 'user');
-          if (lastUserMessage) {
-            setTimeout(() => {
-              // Remove the failed assistant message if it exists
-              const filteredMessages = messages.filter(m => !(m.role === 'assistant' && m.content === ''));
-              setMessages(filteredMessages);
-              
-              // Re-submit with the new fallback provider
-              // The body function should now use the updated fallbackNumber
-              console.log(`Re-submitting with updated fallback_number: ${nextFallback}`);
-              append({
-                role: 'user',
-                content: lastUserMessage.content,
-              });
-            }, 1000);
-          }
-          return; // Don't show toast error for auto-retry
-        } else {
-          userFriendlyMessage = 'All AI providers are currently experiencing capacity issues. Please try again later.';
-          setFallbackNumber(0); // Reset for next conversation
-        }
-      } else if (error.message?.includes('Failed after') && error.message?.includes('attempts')) {
-        userFriendlyMessage = 'Multiple retry attempts failed. Switching to alternative AI providers...';
-        console.log('Retry failure detected, attempting fallback to next provider');
-        
-        // Auto-retry with next fallback provider
-        const maxFallbacks = 3;
-        if (fallbackNumber < maxFallbacks) {
-          const nextFallback = fallbackNumber + 1;
-          console.log(`Auto-retrying with fallback provider #${nextFallback} (current was ${fallbackNumber})`);
-          setFallbackNumber(nextFallback);
-          
-          // Retry the last user message with the new provider
-          const lastUserMessage = messages.findLast(m => m.role === 'user');
-          if (lastUserMessage) {
-            setTimeout(() => {
-              // Remove the failed assistant message if it exists
-              const filteredMessages = messages.filter(m => !(m.role === 'assistant' && m.content === ''));
-              setMessages(filteredMessages);
-              
-              // Re-submit with the new fallback provider
-              // The body function should now use the updated fallbackNumber
-              console.log(`Re-submitting with updated fallback_number: ${nextFallback}`);
-              append({
-                role: 'user',
-                content: lastUserMessage.content,
-              });
-            }, 1000);
-          }
-          return; // Don't show toast error for auto-retry
-        } else {
-          userFriendlyMessage = 'All AI providers failed to respond. Please try again later.';
-          setFallbackNumber(0); // Reset for next conversation
-        }
+        return;
       }
       
-      toast.error(`Error: ${userFriendlyMessage}`);
+      // Handle authentication errors (don't trigger fallback)
+      if (error.message?.includes('authentication') || error.message?.includes('API key')) {
+        toast.error('AI service configuration issue. Please contact support if this persists.');
+        return;
+      }
       
-      // For conversation format errors, automatically retry with a cleaned state
-      if (error.message?.includes('conversation format')) {
+      // Use the centralized error handler for all other errors
+      const fallbackTriggered = handleProviderError(error);
+      
+      // If no fallback was triggered, handle conversation format errors
+      if (!fallbackTriggered && error.message?.includes('conversation format')) {
         console.log('Attempting to recover from conversation format error...');
         setTimeout(() => {
           // Keep only the last user message and retry
