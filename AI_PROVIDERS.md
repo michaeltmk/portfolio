@@ -18,7 +18,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 ### Google Gemini
 ```bash
-GOOGLE_API_KEY=your_google_api_key_here
+GOOGLE_GENERATIVE_AI_API_KEY=your_google_api_key_here
 ```
 
 ### Anthropic Claude
