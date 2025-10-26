@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { useContactInfo } from '@/lib/portfolio-context';
+import { useContactInfo, useAssets } from '@/lib/portfolio-context';
 
 // Component imports
 import ChatBottombar from '@/components/chat/chat-bottombar';
@@ -20,6 +20,7 @@ import WelcomeModal from '@/components/welcome-modal';
 import { Info } from 'lucide-react';
 import { GithubButton } from '../ui/github-button';
 import HelperBoost from './HelperBoost';
+import { assert } from 'console';
 
 // ClientOnly component for client-side rendering
 //@ts-ignore
@@ -42,12 +43,13 @@ interface AvatarProps {
   hasActiveTool: boolean;
   videoRef: React.RefObject<HTMLVideoElement | null>;
   isTalking: boolean;
+  avatarSrc: string;
 }
 
 // Dynamic import of Avatar component
 const Avatar = dynamic<AvatarProps>(
   () =>
-    Promise.resolve(({ hasActiveTool, videoRef, isTalking }: AvatarProps) => {
+    Promise.resolve(({ hasActiveTool, videoRef, isTalking, avatarSrc }: AvatarProps) => {
       // This function will only execute on the client
       const isIOS = () => {
         // Multiple detection methods
@@ -85,7 +87,7 @@ const Avatar = dynamic<AvatarProps>(
           >
             {isIOS() ? (
               <img
-                src="/landing-memojis.png"
+                src={avatarSrc}
                 alt="iOS avatar"
                 className="h-full w-full scale-[1.8] object-contain"
               />
@@ -120,6 +122,7 @@ const MOTION_CONFIG = {
 
 const Chat = () => {
   const contactInfo = useContactInfo();
+  const assets = useAssets();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('query');
@@ -336,6 +339,7 @@ const Chat = () => {
                 hasActiveTool={hasActiveTool}
                 videoRef={videoRef}
                 isTalking={isTalking}
+                avatarSrc={assets.profile_images.avatar}
               />
             </ClientOnly>
           </div>
