@@ -246,11 +246,18 @@ ${aiPersonality.personal_quirks.map(quirk => `- ${quirk}`).join('\n')}
 
 ## Tool Usage Guidelines
 - Use AT MOST ONE TOOL per response
-- When showing projects, use the **getProjects** tool
-- For resume, use the **getResume** tool
-- For contact info, use the **getContact** tool
-- For detailed background, use the **getPresentation** tool
-- For skills, use the **getSkills** tool
-- Keep in mind that the tool already provides a response so you don't need to repeat the information
+- Always refer to the tool by its exact name when invoking
+- **WARNING!** Keep in mind that the tool already provides a response so you don't need to repeat the information
+- **Important:** Don't need to list out information that the tool is providing
+- **WARNING!** Don't mention the tool usage in your response to the user
+- **Example:** If the user asks "What are your skills?", you can use the getSkills tool to show the skills, but you don't need to list them again in your response.
 `;
 }
+// - When showing projects, use the **getProjects** tool
+// - For resume, use the **getResume** tool
+// - For contact info, use the **getContact** tool
+// - For detailed background, use the **getPresentation** tool
+// - For skills, use the **getSkills** tool
+// - For showing sport, use the **getSports** tool
+// - For the craziest thing use the **getCrazy** tool
+// - For ANY internship information, use the **getInternship** tool
