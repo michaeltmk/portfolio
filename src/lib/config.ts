@@ -34,7 +34,6 @@ export interface Professional {
     position: string;
     description: string;
   }>;
-  looking_for: string[];
 }
 
 export interface AIPersonality {
@@ -52,6 +51,18 @@ export interface Repository {
 
 export interface Skills {
   [key: string]: string[];
+}
+
+export interface Opportunities {
+  availability: string;
+  preferred_location: string;
+  remote_work: boolean;
+  looking_for: string[];
+  focus_areas: string[];
+  tech_stack: string[];
+  what_i_bring: string;
+  motivation: string;
+  call_to_action: string;
 }
 
 export interface Project {
@@ -101,6 +112,7 @@ export interface PortfolioConfig {
   ai_personality: AIPersonality;
   repository: Repository;
   skills: Skills;
+  opportunities: Opportunities;
   projects: Project[];
   resume: Resume;
   assets: Assets;
@@ -160,6 +172,10 @@ export function getSkillsServer(): Skills {
   return loadConfigServer().skills;
 }
 
+export function getOpportunitiesServer(): Opportunities {
+  return loadConfigServer().opportunities;
+}
+
 export function getProjectsServer(): Project[] {
   return loadConfigServer().projects;
 }
@@ -193,6 +209,7 @@ export function generateSystemPrompt(): string {
   const personal = getPersonalInfoServer();
   const contact = getContactInfoServer();
   const professional = getProfessionalInfoServer();
+  const opportunities = getOpportunitiesServer();
   const aiPersonality = getAIPersonalityServer();
   const site = getSiteInfoServer();
 
@@ -231,7 +248,7 @@ ${Object.entries(contact.social || {}).map(([platform, data]) =>
 ).join('\n')}
 
 ### What I'm Looking For
-${professional.looking_for.map(item => `- ${item}`).join('\n')}
+${opportunities.looking_for.map(item => `- ${item}`).join('\n')}
 
 ### Personal Traits
 ${aiPersonality.personality_traits.map(trait => `- ${trait}`).join('\n')}

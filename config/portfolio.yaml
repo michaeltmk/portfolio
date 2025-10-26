@@ -172,13 +172,6 @@ professional:
         – Responsible for developing new calibration methods for HOKLAS certification which involved experi-
         mental studies and data analysis.
 
-  looking_for:
-    - Full-stack development opportunities
-    - React/Next.js projects
-    - AI integration projects
-    - Open source contributions
-    - Tech community connections
-
   additional_education:
     - institution: AWS
       degree: Certified Solutions Architect – Associate
@@ -381,6 +374,36 @@ resume:
   file_size: 0.2 MB
   preview_image: /resume-preview.png
   download_url: https://michaeltmk.github.io/cv/cv.pdf
+
+# Opportunities
+opportunities:
+  availability: Open to immediate opportunities
+  preferred_location: Hong Kong
+  remote_work: true
+  looking_for:
+    - Full-stack development opportunities
+    - Data science/Engineering projects
+    - AI integration projects
+    - web3 integration projects
+    - Open source contributions
+    - Tech community connections
+  focus_areas:
+    - Data Science
+    - AI/ML
+    - Full-stack development
+    - Web3
+  tech_stack:
+    - Python
+    - React
+    - SQL
+    - PyTorch
+    - Power BI
+    - Tableau
+  what_i_bring: >-
+    Experience in building data-driven dashboards, optimizing data pipelines, and developing 
+    end-to-end analytics projects. Proven ability to translate raw data into actionable business insights.
+  motivation: I move fast, learn faster, and I'm HUNGRYYYYY for big challenges
+  call_to_action: Let's build cool shit together ✌️
 
 # Assets
 assets:

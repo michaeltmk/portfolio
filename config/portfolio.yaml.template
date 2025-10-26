@@ -3,147 +3,252 @@
 
 # Personal Information
 personal:
-  name: "Michael Tse"
-  nickname: "Mike"
-  age: "25 years old"
+  name: "Alex Chen"
+  nickname: "Alex"
+  age: "28 years old"
   location: "Hong Kong"
-  title: "Full Stack Developer"
-  description: "Hey 👋\nI'm Michael, a passionate full-stack developer building innovative web experiences and AI-powered solutions."
+  title: "Senior Full Stack Developer"
+  description: >-
+    Hey there! 👋 I'm Alex, a passionate full-stack developer with 5+ years of experience 
+    building innovative web applications. I love turning complex problems into simple, 
+    beautiful solutions. When I'm not coding, you'll find me exploring the latest tech 
+    trends or hiking the beautiful trails around Hong Kong.
 
 # Contact Information (Fully Optional Fields)
 contact:
-  email: "tse.man.kit.michael@gmail.com"
-  phone: "+852 1234 5678"
-  location: "Hong Kong"
+  email: "alex.chen.dev@gmail.com"
+  phone: "+852 9876 5432"
+  location: "Hong Kong SAR"
   social: # Supported platforms: linkedin, github, instagram, twitter, facebook, youtube, website
     linkedin:
-      username: "man-kit-michael-tse-4013a5176"
-      url: "https://www.linkedin.com/in/man-kit-michael-tse-4013a5176"
+      username: "alex-chen-fullstack"
+      url: "https://www.linkedin.com/in/alex-chen-fullstack"
     github:
-      username: "michaeltmk"
-      url: "https://github.com/michaeltmk"
-    instagram:
-      username: "michael.tmk"
-      url: "https://www.instagram.com/michael.tmk/"
+      username: "alexchen-dev"
+      url: "https://github.com/alexchen-dev"
+    twitter:
+      username: "alexcodes"
+      url: "https://twitter.com/alexcodes"
+    website:
+      username: "alexchen.dev"
+      url: "https://alexchen.dev"
 
 # Professional Background
 professional:
   education:
-    institution: "University of Hong Kong"
-    degree: "Bachelor of Computer Science"
-    year: "2022"
+    - institution: "University of Hong Kong"
+      degree: "Bachelor of Computer Science"
+      year: "2020-2024"
+    - institution: "Coursera"
+      degree: "Full Stack Web Development Specialization"
+      year: "2023"
   
   experience:
-    - company: "Tech Startup Inc"
-      position: "Full Stack Developer"
-      description: "Built scalable web applications using React and Node.js"
-    - company: "Digital Agency"
+    - company: "TechFlow Solutions"
+      position: "Senior Full Stack Developer"
+      period: "Jan 2024 - Present"
+      description: "Led development of scalable web applications using React, Node.js, and AWS. Implemented CI/CD pipelines and mentored junior developers. Built real-time analytics dashboard serving 10K+ users."
+    - company: "InnovateLab HK"
       position: "Frontend Developer"
-      description: "Developed responsive websites for various clients"
+      period: "Jun 2022 - Dec 2023"
+      description: "Developed responsive web applications for fintech clients. Collaborated with UX designers to implement pixel-perfect designs. Optimized application performance resulting in 40% faster load times."
+    - company: "Digital Craft Agency"
+      position: "Junior Web Developer"
+      period: "Jan 2022 - May 2022"
+      description: "Built custom WordPress themes and plugins. Created interactive web experiences for e-commerce clients using modern JavaScript frameworks."
 
-  looking_for:
-    - "Full-stack development opportunities"
-    - "React/Next.js projects"
-    - "AI integration projects"
-    - "Open source contributions"
-    - "Tech community connections"
+  additional_education:
+    - institution: "AWS"
+      degree: "Certified Solutions Architect - Associate"
+      year: "2024"
+      description: "Validated expertise in designing distributed systems on AWS cloud platform."
+    - institution: "MongoDB University"
+      degree: "MongoDB Developer Certification"
+      year: "2023"
+      description: "Demonstrated proficiency in MongoDB database design and operations."
 
 # AI Personality
 ai_personality:
-  character_name: "Michael Tse"
+  character_name: "Alex Chen"
   personality_traits:
-    - "Tech enthusiast passionate about web development"
-    - "Coffee lover and tech meetup organizer"
-    - "Prefers TypeScript over JavaScript"
-    - "Always learning new technologies"
+    - "Enthusiastic about emerging technologies and AI"
+    - "Collaborative team player with strong leadership skills"
+    - "Detail-oriented perfectionist with a user-first mindset"
+    - "Continuous learner always exploring new frameworks"
+    - "Advocate for clean code and best practices"
   
-  background_story: "Full-stack developer with expertise in React, Next.js, and modern web technologies. Love building user-friendly applications and exploring AI integrations."
+  background_story: >-
+    Senior full-stack developer with expertise in React, Node.js, and cloud technologies. 
+    Passionate about building scalable applications that solve real-world problems. 
+    Has led multiple successful projects from conception to deployment, with a focus on 
+    user experience and performance optimization.
   
   personal_quirks:
-    - "Coffee addict - can't code without it"
-    - "Mechanical keyboard enthusiast"
-    - "Weekend hiker and photographer"
+    - "Drinks way too much bubble tea while coding"
+    - "Has a collection of 20+ mechanical keyboards"
+    - "Always has at least 50 browser tabs open"
+    - "Prefers dark mode for everything"
+    - "Weekend rock climber and photography enthusiast"
 
 # Repository Information
 repository:
-  owner: "michaeltmk"
+  owner: "alexchen-dev"
   name: "portfolio"
-  url: "https://github.com/michaeltmk/portfolio"
+  url: "https://github.com/alexchen-dev/portfolio"
+  star_target: 100
 
 # Skills
-skills:
+skills: # (categories can be customized)
   programming_languages:
     - "JavaScript/TypeScript"
     - "Python"
-    - "HTML/CSS"
+    - "Java"
+    - "Go"
     - "SQL"
   
-  frameworks:
+  frontend_frameworks:
     - "React"
     - "Next.js"
+    - "Vue.js"
+    - "Svelte"
+    - "Angular"
+  
+  backend_frameworks:
     - "Node.js"
     - "Express"
-    - "Tailwind CSS"
+    - "FastAPI"
+    - "Django"
+    - "Spring Boot"
   
-  tools:
-    - "Git/GitHub"
-    - "VS Code"
-    - "Docker"
+  databases:
+    - "PostgreSQL"
+    - "MongoDB"
+    - "Redis"
+    - "MySQL"
+    - "Firebase"
+  
+  cloud_platforms:
+    - "AWS"
+    - "Google Cloud"
+    - "Azure"
     - "Vercel"
+    - "Netlify"
+  
+  tools_technologies:
+    - "Docker"
+    - "Kubernetes"
+    - "Git/GitHub"
+    - "Webpack"
+    - "Vite"
+    - "Tailwind CSS"
   
   soft_skills:
     - "Problem-solving"
-    - "Team collaboration"
-    - "Communication"
-    - "Quick learner"
+    - "Team leadership"
+    - "Agile methodologies"
+    - "Technical communication"
+    - "Mentoring"
 
 # Projects
 projects:
-  - title: "Portfolio Website"
-    description: "Modern portfolio with AI chat integration"
-    tech_stack: ["Next.js", "React", "TypeScript", "Tailwind CSS"]
-    demo_url: "https://your-portfolio.com"
-    repo_url: "https://github.com/michaeltmk/portfolio"
+  - title: "AI-Powered Task Manager"
+    description: "Smart productivity app with natural language processing for task organization and priority management. Features real-time collaboration and intelligent deadline suggestions."
+    tech_stack: ["Next.js", "TypeScript", "OpenAI API", "Prisma", "PostgreSQL", "Tailwind CSS"]
+    demo_url: "https://taskmaster-ai.vercel.app"
+    repo_url: "https://github.com/michaeltmk/taskmaster-ai"
     images:
-      - src: "/projects/portfolio-home.png"
-        alt: "Portfolio homepage"
+      - src: "/projects/taskmaster-home.png"
+        alt: "TaskMaster AI homepage"
   
-  - title: "E-commerce Platform"
-    description: "Full-stack e-commerce solution with modern UI"
-    tech_stack: ["React", "Node.js", "MongoDB", "Express"]
-    demo_url: "#"
-    repo_url: "https://github.com/michaeltmk/ecommerce"
+  - title: "Real-time Analytics Dashboard"
+    description: "Comprehensive analytics platform for e-commerce businesses with real-time data visualization, custom report generation, and predictive analytics."
+    tech_stack: ["React", "D3.js", "Node.js", "MongoDB", "Socket.io", "AWS"]
+    demo_url: "https://analytics-pro-demo.com"
+    repo_url: "https://github.com/michaeltmk/analytics-dashboard"
     images:
-      - src: "/projects/ecommerce-home.png"
-        alt: "E-commerce homepage"
+      - src: "/projects/analytics-dashboard.png"
+        alt: "Analytics dashboard interface"
+  
+  - title: "Blockchain Voting System"
+    description: "Secure and transparent voting platform built on Ethereum blockchain with smart contracts for election management and vote verification."
+    tech_stack: ["Solidity", "Web3.js", "React", "Hardhat", "IPFS", "MetaMask"]
+    demo_url: "https://blockvote-demo.netlify.app"
+    repo_url: "https://github.com/michaeltmk/blockchain-voting"
+    images:
+      - src: "/projects/blockvote-interface.png"
+        alt: "Blockchain voting interface"
+  
+  - title: "Social Media Aggregator"
+    description: "Cross-platform social media management tool with content scheduling, analytics tracking, and AI-powered content suggestions."
+    tech_stack: ["Vue.js", "Python", "FastAPI", "Redis", "PostgreSQL", "Docker"]
+    demo_url: "#"
+    repo_url: "https://github.com/michaeltmk/social-aggregator"
+    images:
+      - src: "/projects/social-aggregator.png"
+        alt: "Social media management dashboard"
+
+# Opportunities
+opportunities:
+  availability: "Available for new opportunities starting Q1 2025"
+  preferred_location: "Hong Kong"
+  remote_work: true
+  looking_for:
+    - "Senior Full Stack Developer roles"
+    - "Tech Lead positions"
+    - "AI/ML integration projects"
+    - "Startup consulting opportunities"
+    - "Open source collaborations"
+    - "Speaking engagements"
+  focus_areas:
+    - "Web Application Development"
+    - "AI/ML Integration"
+    - "Cloud Architecture"
+    - "Team Leadership"
+    - "Product Development"
+  tech_stack:
+    - "React/Next.js"
+    - "Node.js"
+    - "TypeScript"
+    - "Python"
+    - "AWS/GCP"
+    - "PostgreSQL"
+    - "Docker"
+    - "Kubernetes"
+  what_i_bring: >-
+    5+ years of full-stack development experience with a proven track record of building 
+    scalable web applications. Strong expertise in modern JavaScript frameworks, cloud 
+    architecture, and team leadership. Passionate about creating user-centric solutions 
+    and driving technical innovation.
+  motivation: "I thrive on solving complex technical challenges and building products that make a real impact"
+  call_to_action: "Let's build something amazing together! 🚀"
 
 # Resume
 resume:
-  title: "Michael's Resume"
-  description: "Full Stack Developer"
+  title: "Alex Chen's Resume"
+  description: "Senior Full Stack Developer"
   file_type: "PDF"
   last_updated: "October 2024"
-  file_size: "0.2 MB"
+  file_size: "0.3 MB"
   preview_image: "/resume-preview.png"
-  download_url: "https://michaeltmk.github.io/cv/cv.pdf"
+  download_url: "https://alexchen.dev/resume.pdf"
 
 # Assets
 assets:
   profile_images:
     main: "/profile-main.jpg"
     avatar: "/avatar-memoji.png"
-    fallback: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+    fallback: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d"
   
-  logo: "/logo-michael.svg"
+  logo: "/logo-alex.svg"
   
   branding:
-    primary_color: "#0070f3"
-    secondary_color: "#666666"
+    primary_color: "#3b82f6"
+    secondary_color: "#64748b"
 
 # Site Configuration
 site:
-  name: "Michael Tse - Portfolio"
-  title: "Full Stack Developer Portfolio"
-  description: "Modern portfolio showcasing full-stack development projects and AI integrations"
-  url: "https://your-portfolio.com"
-  author: "Michael Tse"
+  name: "Alex Chen - Portfolio"
+  title: "Senior Full Stack Developer Portfolio"
+  description: "Showcasing 5+ years of full-stack development expertise with modern web technologies and AI integrations"
+  url: "https://alexchen.dev"
+  author: "Alex Chen"

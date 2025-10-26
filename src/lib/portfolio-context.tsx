@@ -7,6 +7,7 @@ import type {
   Professional, 
   Repository, 
   Skills, 
+  Opportunities,
   Resume, 
   Assets, 
   Site,
@@ -20,6 +21,7 @@ interface PortfolioContextType {
   professional: Professional;
   repository: Repository;
   skills: Skills;
+  opportunities: Opportunities;
   projects: Project[];
   resume: Resume;
   assets: Assets;
@@ -70,6 +72,10 @@ export function useRepositoryInfo() {
 
 export function useSkills() {
   return usePortfolioConfig().skills;
+}
+
+export function useOpportunities() {
+  return usePortfolioConfig().opportunities;
 }
 
 export function useProjects() {

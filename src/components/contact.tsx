@@ -3,11 +3,12 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone, Linkedin, Github, Instagram, MapPin, Twitter, Facebook, Youtube, Globe } from 'lucide-react';
-import { useContactInfo, useProfessionalInfo } from '@/lib/portfolio-context';
+import { useContactInfo, useProfessionalInfo, useOpportunities } from '@/lib/portfolio-context';
 
 export function Contact() {
   const contact = useContactInfo();
   const professional = useProfessionalInfo();
+  const opportunities = useOpportunities();
 
   // Icon mapping for different social platforms
   const socialIcons: { [key: string]: any } = {
@@ -134,10 +135,10 @@ export function Contact() {
         <div className="bg-accent rounded-lg p-6">
           <h3 className="font-semibold mb-2">What I'm Looking For</h3>
           <p className="text-sm text-muted-foreground">
-            {professional.looking_for.map((item, index) => (
+            {opportunities.looking_for.map((item, index) => (
               <span key={index}>
                 • {item}
-                {index < professional.looking_for.length - 1 ? ' ' : ''}
+                {index < opportunities.looking_for.length - 1 ? ' ' : ''}
               </span>
             ))}
           </p>
