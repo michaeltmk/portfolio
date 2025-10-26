@@ -74,16 +74,30 @@ Simply update the `config/portfolio.yaml` file with your personal information, a
    pnpm install
    ```
 
-3. **Set up environment variables**
+3. **Set up environment variables and portfolio configuration**
+   
+   **a) Create environment variables file**
    
    Create a `.env.local` file in the root directory:
    ```env
-   MISTRAL_API_KEY="your_mistral_api_key_here"
-   GITHUB_TOKEN="your_github_token_here"
+   cp .env.example .env.local
    ```
    
    - Get your Mistral API Key from [admin.mistral.ai](https://admin.mistral.ai/organization/api-keys)
    - Generate your GitHub Token at [github.com/settings/tokens](https://github.com/settings/personal-access-tokens)
+   
+   **b) Configure your portfolio content**
+   
+   Copy the portfolio configuration template and customize it with your information:
+   ```bash
+   cp config/portfolio.yaml.template config/portfolio.yaml
+   ```
+   
+   Then edit `config/portfolio.yaml` to update:
+   - Personal information (name, title, description)
+   - Contact details and social links
+   - Professional background and experience
+   - Skills and projects
 
 4. **Run the development server**
    ```bash

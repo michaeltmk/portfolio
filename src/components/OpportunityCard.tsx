@@ -1,14 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CalendarDays, Code2, Globe } from 'lucide-react';
+import { CalendarDays, Code2, Globe, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useAssets, usePersonalInfo, useContactInfo } from '@/lib/portfolio-context';
+import { useAssets, usePersonalInfo, useContactInfo, useOpportunities, useProfessionalInfo } from '@/lib/portfolio-context';
 
 const OpportunityCard = () => {
   const assets = useAssets();
   const personalInfo = usePersonalInfo();
   const contactInfo = useContactInfo();
+  const opportunities = useOpportunities();
+  const professional = useProfessionalInfo();
   
   const openMail = () => {
     window.open(`mailto:${contactInfo.email}`, '_blank');
@@ -60,9 +62,9 @@ const OpportunityCard = () => {
         <div className="flex items-start gap-3">
           <CalendarDays className="mt-1 h-5 w-5 text-blue-500" />
           <div>
-            <p className="text-foreground text-sm font-medium">Duration</p>
+            <p className="text-foreground text-sm font-medium">Availability</p>
             <p className="text-muted-foreground text-sm">
-              currently open for contributions August (2025)
+              {opportunities.availability}
             </p>
           </div>
         </div>
@@ -71,7 +73,7 @@ const OpportunityCard = () => {
           <div>
             <p className="text-foreground text-sm font-medium">Location</p>
             <p className="text-muted-foreground text-sm">
-              Preferably Gurugram
+              Preferably {opportunities.preferred_location}{opportunities.remote_work ? ' or anywhere remote' : ''}
             </p>
           </div>
         </div>
@@ -80,19 +82,18 @@ const OpportunityCard = () => {
         <div className="flex items-start gap-3 sm:col-span-2">
           <Code2 className="mt-1 h-5 w-5 text-purple-500" />
           <div className="w-full">
-            <p className="text-foreground text-sm font-medium">Tech stack</p>
+            <p className="text-foreground text-sm font-medium">Focus & Tech stack</p>
             <div className="text-muted-foreground grid grid-cols-1 gap-y-1 text-sm sm:grid-cols-2">
               <ul className="decoration-none list-disc pl-4">
-                <li>Python, Next.js, SQL</li>
-                <li>Flask, Django</li>
-                <li>OpenAI, Mistral, Claude</li>
-                <li>Prompt engineering, fine-tuning</li>
+                <li>Focus: {opportunities.focus_areas.join(', ')}</li>
+                {opportunities.tech_stack.slice(0, 3).map((tech, index) => (
+                  <li key={index}>{tech}</li>
+                ))}
               </ul>
               <ul className="list-disc pl-4">
-                <li>JavaScript, React</li>
-                <li>Hugging Face Transformers</li>
-                <li>TensorFlow, PyTorch</li>
-                <li>LangChain + AI agent workflows</li>
+                {opportunities.tech_stack.slice(3).map((tech, index) => (
+                  <li key={index}>{tech}</li>
+                ))}
                 <li>
                   <a
                     href="/chat?query=What%20are%20your%20skills%3F%20Give%20me%20a%20list%20of%20your%20soft%20and%20hard%20skills."
@@ -105,6 +106,19 @@ const OpportunityCard = () => {
             </div>
           </div>
         </div>
+
+        {/* Looking for */}
+        <div className="flex items-start gap-3">
+          <Search className="mt-1 h-5 w-5 text-yellow-500" />
+          <div className="w-full">
+            <p className="text-foreground text-sm font-medium">Looking for</p>
+            <ul className="text-muted-foreground list-disc pl-4 text-sm">
+              {opportunities.looking_for.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
 
       {/* What I bring */}
@@ -113,9 +127,7 @@ const OpportunityCard = () => {
           What I bring
         </p>
         <p className="text-foreground text-sm">
-          Real-world AI dev experience. <br /> 
-          Blending AI passion with hands-on development to bring tech ideas to life. <br /> 
-          I ship fast, and love building useful things that actually work.
+          {opportunities.what_i_bring}
         </p>
       </div>
 

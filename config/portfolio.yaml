@@ -68,33 +68,6 @@ professional:
         – Skills: Data Lake House (DLH) strategy · Feature Store architecture · Vector database / semantic
         search enablement · Enterprise data governance & compliance · Product roadmap & prioritization ·
         Platform & MLOps enablement · Cross-functional stakeholder alignment · Change & risk management
-        - >-
-          Managed data or ML projects or applications which involved data ingestions, mlOps towards
-          different
-        - >-
-          Leaded the Data Lake House (DLH) product development, a data platform that provides a
-          unified
-        - >-
-          Designed and implemented data governance policies and best practices, ensuring data
-          security, compli-
-        - >-
-          Collaborated with cross-functional teams to define and implement data governance policies
-          and best
-        - >-
-          Lead on the feature store development to provide a centralized dataset for data scientists
-          for training
-        - >-
-          Leaded on the team enhancement, including organized team training, knowledge sharing
-          sessions.
-        - >-
-          Leaded on the poc projects for streaming analysis, vector database and team infrastructure
-          revamping.
-        - >-
-          Acted as a bridge between business and technical teams, translating requirements between
-          project
-        - >-
-          Skills: Data Lake House (DLH) strategy · Feature Store architecture · Vector database /
-          semantic
 
     - company: Cathay Pacific
       position: Solution Analyst
@@ -172,13 +145,6 @@ professional:
         – Responsible for developing new calibration methods for HOKLAS certification which involved experi-
         mental studies and data analysis.
 
-  looking_for:
-    - Full-stack development opportunities
-    - React/Next.js projects
-    - AI integration projects
-    - Open source contributions
-    - Tech community connections
-
   additional_education:
     - institution: AWS
       degree: Certified Solutions Architect – Associate
@@ -237,13 +203,15 @@ professional:
 ai_personality:
   character_name: Michael Tse
   personality_traits:
-    - Tech enthusiast passionate about web development
+    - Tech enthusiast passionate about full-stack development and AI integration
+    - Problem solver with a knack for data-driven solutions
+    - Collaborative team player who thrives in dynamic environments
     - Coffee lover and tech meetup organizer
-    - Prefers TypeScript over JavaScript
+    - Prefers TypeScript, GoLang, and Python
     - Always learning new technologies
   background_story: >-
-    Full-stack developer with expertise in React, Next.js, and modern web technologies. Love
-    building user-friendly applications and exploring AI integrations.
+    Full-stack developer with expertise in building scalable applications. Love
+    building user-friendly applications and exploring AI/web3 integrations.
   personal_quirks:
     - Coffee addict - can't code without it
     - Mechanical keyboard enthusiast
@@ -254,7 +222,6 @@ repository:
   owner: michaeltmk
   name: portfolio
   url: https://github.com/michaeltmk/portfolio
-  star_target: 50
 
 # Skills
 skills:
@@ -328,8 +295,8 @@ projects:
     demo_url: null
     repo_url: null
     images:
-      - src: /projects/portfolio-home.png
-        alt: Portfolio homepage
+      - src: /projects/asd-detection-home.png
+        alt: ASD Detection homepage
   - title: ChatGPT Teaching Assistant
     description: A cloud based RAG LLM chatbot using ChatGPT model to teach students physics based on the lecture notes, videos, and pastpapers. It will only answer questions within the knowledge base and every answer will include referencing.
     tech_stack:
@@ -342,8 +309,8 @@ projects:
     demo_url: null
     repo_url: null
     images:
-      - src: /projects/ecommerce-home.png
-        alt: E-commerce homepage
+      - src: /projects/chatgpt-teach-ass.jpeg
+        alt: ChatGPT Teaching Assistant chat
   - title: Tx
     description: >-
       A Web3 project which provide a trustworthy, transparent and sustainable resale ticketing system with the use of NFT and encrypted on chain data.
@@ -353,13 +320,18 @@ projects:
       - Rust
       - Node.js
       - Cloud Applications
-    repo_url: null
+    repo_url: https://github.com/Tx-Solana
     demo_url: https://txticketing.com
-    images: []
+    images:
+      - src: /projects/tx-home.png
+        alt: Tx Ticketing homepage
   - title: Analysis of population and Venue distribution in Hong Kong
     description: >-
       Used K-means clustering to analyze the relationship between population and venue distribution in HK.
-    tech_stack: []
+    tech_stack:
+      - Data Analysis
+      - K-means Clustering
+      - Matplotlib
     repo_url: https://github.com/michaeltmk/IBM-Data-Science-Capstone-Project
     demo_url: null
     images: []
@@ -368,7 +340,9 @@ projects:
       Demonstrated on computer vision aim with CNN, data argumentation techniques, written in Tensorflow.
       Trained on captchas collected in web and a captchas simulator.
     tech_stack:
-      - node
+      - Computer Vision
+      - Convolutional Neural Networks (CNN)
+      - TensorFlow
     repo_url: https://github.com/michaeltmk/Captcha_cracker
     demo_url: null
     images: []
@@ -382,6 +356,35 @@ resume:
   file_size: 0.2 MB
   preview_image: /resume-preview.png
   download_url: https://michaeltmk.github.io/cv/cv.pdf
+
+# Opportunities
+opportunities:
+  availability: Open to immediate opportunities
+  preferred_location: Hong Kong
+  remote_work: true
+  looking_for:
+    - Full-stack development opportunities
+    - Data science/Engineering projects
+    - AI integration projects
+    - web3 integration projects
+    - Open source contributions
+    - Tech community connections
+  focus_areas:
+    - Data Science
+    - AI/ML
+    - Full-stack development
+    - Web3
+  tech_stack:
+    - container technologies
+    - multicloud
+    - Data Engineering
+    - Machine Learning
+    - Data Science
+    - Solana Blockchain
+  what_i_bring: >-
+    Experience in building scalable full-stack, data engineering, and AI/ML solutions across cloud and web3 environments. Proven ability to translate business needs into technical solutions, with a passion for learning and innovation.
+  motivation: I move fast, learn faster, and I'm HUNGRYYYYY for big challenges
+  call_to_action: Let's build cool shit together ✌️
 
 # Assets
 assets:

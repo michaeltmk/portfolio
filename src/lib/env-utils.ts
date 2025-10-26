@@ -33,7 +33,20 @@ export function getAIProviderConfig() {
 
 // Check if we're in production
 export function isProduction(): boolean {
-  return process.env.NODE_ENV === 'production';
+  const env = getEnvironmentConfig();
+  return env.nodeEnv === 'production';
+}
+
+// Check if we're in development
+export function isDevelopment(): boolean {
+  const env = getEnvironmentConfig();
+  return env.nodeEnv === 'development';
+}
+
+// Get the current environment
+export function getNodeEnv(): string {
+  const env = getEnvironmentConfig();
+  return env.nodeEnv;
 }
 
 // Check if analytics should be enabled

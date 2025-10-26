@@ -34,7 +34,6 @@ export interface Professional {
     position: string;
     description: string;
   }>;
-  looking_for: string[];
 }
 
 export interface AIPersonality {
@@ -48,11 +47,22 @@ export interface Repository {
   owner: string;
   name: string;
   url: string;
-  star_target: number;
 }
 
 export interface Skills {
   [key: string]: string[];
+}
+
+export interface Opportunities {
+  availability: string;
+  preferred_location: string;
+  remote_work: boolean;
+  looking_for: string[];
+  focus_areas: string[];
+  tech_stack: string[];
+  what_i_bring: string;
+  motivation: string;
+  call_to_action: string;
 }
 
 export interface Project {
@@ -102,6 +112,7 @@ export interface PortfolioConfig {
   ai_personality: AIPersonality;
   repository: Repository;
   skills: Skills;
+  opportunities: Opportunities;
   projects: Project[];
   resume: Resume;
   assets: Assets;
@@ -114,6 +125,7 @@ export interface EnvironmentConfig {
   googleAnalyticsId: string;
   aiPrimaryProvider: string;
   aiFallbackProviders: string[];
+  nodeEnv: string;
 }
 
 let config: PortfolioConfig | null = null;
@@ -160,6 +172,10 @@ export function getSkillsServer(): Skills {
   return loadConfigServer().skills;
 }
 
+export function getOpportunitiesServer(): Opportunities {
+  return loadConfigServer().opportunities;
+}
+
 export function getProjectsServer(): Project[] {
   return loadConfigServer().projects;
 }
@@ -184,6 +200,7 @@ export function getEnvironmentConfig(): EnvironmentConfig {
     googleAnalyticsId: process.env.NEXT_PUBLIC_GA_ID || '',
     aiPrimaryProvider: process.env.AI_PRIMARY_PROVIDER || 'mistral',
     aiFallbackProviders: process.env.AI_FALLBACK_PROVIDERS?.split(',') || ['openai', 'anthropic'],
+    nodeEnv: process.env.NODE_ENV || 'development',
   };
 }
 
@@ -192,6 +209,7 @@ export function generateSystemPrompt(): string {
   const personal = getPersonalInfoServer();
   const contact = getContactInfoServer();
   const professional = getProfessionalInfoServer();
+  const opportunities = getOpportunitiesServer();
   const aiPersonality = getAIPersonalityServer();
   const site = getSiteInfoServer();
 
@@ -230,7 +248,7 @@ ${Object.entries(contact.social || {}).map(([platform, data]) =>
 ).join('\n')}
 
 ### What I'm Looking For
-${professional.looking_for.map(item => `- ${item}`).join('\n')}
+${opportunities.looking_for.map(item => `- ${item}`).join('\n')}
 
 ### Personal Traits
 ${aiPersonality.personality_traits.map(trait => `- ${trait}`).join('\n')}
@@ -244,11 +262,18 @@ ${aiPersonality.personal_quirks.map(quirk => `- ${quirk}`).join('\n')}
 
 ## Tool Usage Guidelines
 - Use AT MOST ONE TOOL per response
-- When showing projects, use the **getProjects** tool
-- For resume, use the **getResume** tool
-- For contact info, use the **getContact** tool
-- For detailed background, use the **getPresentation** tool
-- For skills, use the **getSkills** tool
-- Keep in mind that the tool already provides a response so you don't need to repeat the information
+- Always refer to the tool by its exact name when invoking
+- **WARNING!** Keep in mind that the tool already provides a response so you don't need to repeat the information
+- **Important:** Don't need to list out information that the tool is providing
+- **WARNING!** Don't mention the tool usage in your response to the user
+- **Example:** If the user asks "What are your skills?", you can use the getSkills tool to show the skills, but you don't need to list them again in your response.
 `;
 }
+// - When showing projects, use the **getProjects** tool
+// - For resume, use the **getResume** tool
+// - For contact info, use the **getContact** tool
+// - For detailed background, use the **getPresentation** tool
+// - For skills, use the **getSkills** tool
+// - For showing sport, use the **getSports** tool
+// - For the craziest thing use the **getCrazy** tool
+// - For ANY internship information, use the **getInternship** tool

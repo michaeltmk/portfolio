@@ -1,7 +1,10 @@
+import { getEnvironmentConfig } from '@/lib/config';
+
 export async function GET(req: Request) {
+  const env = getEnvironmentConfig();
   const res = await fetch('https://api.github.com/repos/michaeltmk/portfolio', {
     headers: {
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      Authorization: `Bearer ${env.githubToken}`,
     },
   });
 
