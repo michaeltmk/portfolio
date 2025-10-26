@@ -392,7 +392,7 @@ assets:
     main: /profile-main.jpg
     avatar: /avatar-memoji.png
     fallback: https://images.unsplash.com/photo-1472099645785-5658abf4ff4e
-  logo: /logo-michael.svg
+  logo: /logo-michael.png
   branding:
     primary_color: null
     secondary_color: null
