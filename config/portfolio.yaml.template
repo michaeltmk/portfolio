@@ -10,12 +10,12 @@ personal:
   title: "Full Stack Developer"
   description: "Hey 👋\nI'm Michael, a passionate full-stack developer building innovative web experiences and AI-powered solutions."
 
-# Contact Information
+# Contact Information (Fully Optional Fields)
 contact:
   email: "tse.man.kit.michael@gmail.com"
   phone: "+852 1234 5678"
   location: "Hong Kong"
-  social:
+  social: # Supported platforms: linkedin, github, instagram, twitter, facebook, youtube, website
     linkedin:
       username: "man-kit-michael-tse-4013a5176"
       url: "https://www.linkedin.com/in/man-kit-michael-tse-4013a5176"
