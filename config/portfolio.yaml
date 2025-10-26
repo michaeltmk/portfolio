@@ -320,8 +320,8 @@ projects:
     demo_url: null
     repo_url: null
     images:
-      - src: /projects/portfolio-home.png
-        alt: Portfolio homepage
+      - src: /projects/asd-detection-home.png
+        alt: ASD Detection homepage
   - title: ChatGPT Teaching Assistant
     description: A cloud based RAG LLM chatbot using ChatGPT model to teach students physics based on the lecture notes, videos, and pastpapers. It will only answer questions within the knowledge base and every answer will include referencing.
     tech_stack:
@@ -334,8 +334,8 @@ projects:
     demo_url: null
     repo_url: null
     images:
-      - src: /projects/ecommerce-home.png
-        alt: E-commerce homepage
+      - src: /projects/chatgpt-teach-ass.jpeg
+        alt: ChatGPT Teaching Assistant chat
   - title: Tx
     description: >-
       A Web3 project which provide a trustworthy, transparent and sustainable resale ticketing system with the use of NFT and encrypted on chain data.
@@ -345,13 +345,18 @@ projects:
       - Rust
       - Node.js
       - Cloud Applications
-    repo_url: null
+    repo_url: https://github.com/Tx-Solana
     demo_url: https://txticketing.com
-    images: []
+    images:
+      - src: /projects/tx-home.png
+        alt: Tx Ticketing homepage
   - title: Analysis of population and Venue distribution in Hong Kong
     description: >-
       Used K-means clustering to analyze the relationship between population and venue distribution in HK.
-    tech_stack: []
+    tech_stack:
+      - Data Analysis
+      - K-means Clustering
+      - Matplotlib
     repo_url: https://github.com/michaeltmk/IBM-Data-Science-Capstone-Project
     demo_url: null
     images: []
@@ -360,7 +365,9 @@ projects:
       Demonstrated on computer vision aim with CNN, data argumentation techniques, written in Tensorflow.
       Trained on captchas collected in web and a captchas simulator.
     tech_stack:
-      - node
+      - Computer Vision
+      - Convolutional Neural Networks (CNN)
+      - TensorFlow
     repo_url: https://github.com/michaeltmk/Captcha_cracker
     demo_url: null
     images: []
