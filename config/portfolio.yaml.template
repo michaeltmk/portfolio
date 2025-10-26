@@ -69,7 +69,6 @@ repository:
   owner: "michaeltmk"
   name: "portfolio"
   url: "https://github.com/michaeltmk/portfolio"
-  star_target: 50
 
 # Skills
 skills:

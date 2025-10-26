@@ -48,7 +48,6 @@ export interface Repository {
   owner: string;
   name: string;
   url: string;
-  star_target: number;
 }
 
 export interface Skills {
