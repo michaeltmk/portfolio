@@ -114,6 +114,7 @@ export interface EnvironmentConfig {
   googleAnalyticsId: string;
   aiPrimaryProvider: string;
   aiFallbackProviders: string[];
+  nodeEnv: string;
 }
 
 let config: PortfolioConfig | null = null;
@@ -184,6 +185,7 @@ export function getEnvironmentConfig(): EnvironmentConfig {
     googleAnalyticsId: process.env.NEXT_PUBLIC_GA_ID || '',
     aiPrimaryProvider: process.env.AI_PRIMARY_PROVIDER || 'mistral',
     aiFallbackProviders: process.env.AI_FALLBACK_PROVIDERS?.split(',') || ['openai', 'anthropic'],
+    nodeEnv: process.env.NODE_ENV || 'development',
   };
 }
 
