@@ -68,33 +68,6 @@ professional:
         – Skills: Data Lake House (DLH) strategy · Feature Store architecture · Vector database / semantic
         search enablement · Enterprise data governance & compliance · Product roadmap & prioritization ·
         Platform & MLOps enablement · Cross-functional stakeholder alignment · Change & risk management
-        - >-
-          Managed data or ML projects or applications which involved data ingestions, mlOps towards
-          different
-        - >-
-          Leaded the Data Lake House (DLH) product development, a data platform that provides a
-          unified
-        - >-
-          Designed and implemented data governance policies and best practices, ensuring data
-          security, compli-
-        - >-
-          Collaborated with cross-functional teams to define and implement data governance policies
-          and best
-        - >-
-          Lead on the feature store development to provide a centralized dataset for data scientists
-          for training
-        - >-
-          Leaded on the team enhancement, including organized team training, knowledge sharing
-          sessions.
-        - >-
-          Leaded on the poc projects for streaming analysis, vector database and team infrastructure
-          revamping.
-        - >-
-          Acted as a bridge between business and technical teams, translating requirements between
-          project
-        - >-
-          Skills: Data Lake House (DLH) strategy · Feature Store architecture · Vector database /
-          semantic
 
     - company: Cathay Pacific
       position: Solution Analyst
@@ -230,13 +203,15 @@ professional:
 ai_personality:
   character_name: Michael Tse
   personality_traits:
-    - Tech enthusiast passionate about web development
+    - Tech enthusiast passionate about full-stack development and AI integration
+    - Problem solver with a knack for data-driven solutions
+    - Collaborative team player who thrives in dynamic environments
     - Coffee lover and tech meetup organizer
-    - Prefers TypeScript over JavaScript
+    - Prefers TypeScript, GoLang, and Python
     - Always learning new technologies
   background_story: >-
-    Full-stack developer with expertise in React, Next.js, and modern web technologies. Love
-    building user-friendly applications and exploring AI integrations.
+    Full-stack developer with expertise in building scalable applications. Love
+    building user-friendly applications and exploring AI/web3 integrations.
   personal_quirks:
     - Coffee addict - can't code without it
     - Mechanical keyboard enthusiast
@@ -400,15 +375,14 @@ opportunities:
     - Full-stack development
     - Web3
   tech_stack:
-    - Python
-    - React
-    - SQL
-    - PyTorch
-    - Power BI
-    - Tableau
+    - container technologies
+    - multicloud
+    - Data Engineering
+    - Machine Learning
+    - Data Science
+    - Solana Blockchain
   what_i_bring: >-
-    Experience in building data-driven dashboards, optimizing data pipelines, and developing 
-    end-to-end analytics projects. Proven ability to translate raw data into actionable business insights.
+    Experience in building scalable full-stack, data engineering, and AI/ML solutions across cloud and web3 environments. Proven ability to translate business needs into technical solutions, with a passion for learning and innovation.
   motivation: I move fast, learn faster, and I'm HUNGRYYYYY for big challenges
   call_to_action: Let's build cool shit together ✌️
 
