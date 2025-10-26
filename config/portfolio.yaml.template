@@ -1,0 +1,150 @@
+# Portfolio Configuration
+# Update this file to customize your portfolio
+
+# Personal Information
+personal:
+  name: "Michael Tse"
+  nickname: "Mike"
+  age: "25 years old"
+  location: "Hong Kong"
+  title: "Full Stack Developer"
+  description: "Hey 👋\nI'm Michael, a passionate full-stack developer building innovative web experiences and AI-powered solutions."
+
+# Contact Information
+contact:
+  email: "tse.man.kit.michael@gmail.com"
+  phone: "+852 1234 5678"
+  location: "Hong Kong"
+  social:
+    linkedin:
+      username: "man-kit-michael-tse-4013a5176"
+      url: "https://www.linkedin.com/in/man-kit-michael-tse-4013a5176"
+    github:
+      username: "michaeltmk"
+      url: "https://github.com/michaeltmk"
+    instagram:
+      username: "michael.tmk"
+      url: "https://www.instagram.com/michael.tmk/"
+
+# Professional Background
+professional:
+  education:
+    institution: "University of Hong Kong"
+    degree: "Bachelor of Computer Science"
+    year: "2022"
+  
+  experience:
+    - company: "Tech Startup Inc"
+      position: "Full Stack Developer"
+      description: "Built scalable web applications using React and Node.js"
+    - company: "Digital Agency"
+      position: "Frontend Developer"
+      description: "Developed responsive websites for various clients"
+
+  looking_for:
+    - "Full-stack development opportunities"
+    - "React/Next.js projects"
+    - "AI integration projects"
+    - "Open source contributions"
+    - "Tech community connections"
+
+# AI Personality
+ai_personality:
+  character_name: "Michael Tse"
+  personality_traits:
+    - "Tech enthusiast passionate about web development"
+    - "Coffee lover and tech meetup organizer"
+    - "Prefers TypeScript over JavaScript"
+    - "Always learning new technologies"
+  
+  background_story: "Full-stack developer with expertise in React, Next.js, and modern web technologies. Love building user-friendly applications and exploring AI integrations."
+  
+  personal_quirks:
+    - "Coffee addict - can't code without it"
+    - "Mechanical keyboard enthusiast"
+    - "Weekend hiker and photographer"
+
+# Repository Information
+repository:
+  owner: "michaeltmk"
+  name: "portfolio"
+  url: "https://github.com/michaeltmk/portfolio"
+  star_target: 50
+
+# Skills
+skills:
+  programming_languages:
+    - "JavaScript/TypeScript"
+    - "Python"
+    - "HTML/CSS"
+    - "SQL"
+  
+  frameworks:
+    - "React"
+    - "Next.js"
+    - "Node.js"
+    - "Express"
+    - "Tailwind CSS"
+  
+  tools:
+    - "Git/GitHub"
+    - "VS Code"
+    - "Docker"
+    - "Vercel"
+  
+  soft_skills:
+    - "Problem-solving"
+    - "Team collaboration"
+    - "Communication"
+    - "Quick learner"
+
+# Projects
+projects:
+  - title: "Portfolio Website"
+    description: "Modern portfolio with AI chat integration"
+    tech_stack: ["Next.js", "React", "TypeScript", "Tailwind CSS"]
+    demo_url: "https://your-portfolio.com"
+    repo_url: "https://github.com/michaeltmk/portfolio"
+    images:
+      - src: "/projects/portfolio-home.png"
+        alt: "Portfolio homepage"
+  
+  - title: "E-commerce Platform"
+    description: "Full-stack e-commerce solution with modern UI"
+    tech_stack: ["React", "Node.js", "MongoDB", "Express"]
+    demo_url: "#"
+    repo_url: "https://github.com/michaeltmk/ecommerce"
+    images:
+      - src: "/projects/ecommerce-home.png"
+        alt: "E-commerce homepage"
+
+# Resume
+resume:
+  title: "Michael's Resume"
+  description: "Full Stack Developer"
+  file_type: "PDF"
+  last_updated: "October 2024"
+  file_size: "0.2 MB"
+  preview_image: "/resume-preview.png"
+  download_url: "https://michaeltmk.github.io/cv/cv.pdf"
+
+# Assets
+assets:
+  profile_images:
+    main: "/profile-main.jpg"
+    avatar: "/avatar-memoji.png"
+    fallback: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+  
+  logo: "/logo-michael.svg"
+  
+  branding:
+    primary_color: "#0070f3"
+    secondary_color: "#666666"
+
+# Site Configuration
+site:
+  name: "Michael Tse - Portfolio"
+  title: "Full Stack Developer Portfolio"
+  description: "Modern portfolio showcasing full-stack development projects and AI integrations"
+  url: "https://your-portfolio.com"
+  author: "Michael Tse"
