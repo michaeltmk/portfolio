@@ -136,7 +136,7 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 [![Portfolio](https://img.shields.io/badge/Live_Demo-example.com-2ea44f?style=for-the-badge&logo=vercel)](https://www.example.com)
 &nbsp;
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/man-kit-michael-tse-4013a5176/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/man-kit-michael-tse/)
 
 </div>
 

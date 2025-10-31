@@ -8,11 +8,7 @@ personal:
   # age: 25 years old
   location: Hong Kong
   title: Full Stack Developer
-  description: >-
-    A quick learner, and explorer, with a Science and Engineering background, who has a great
-    interest in new technology that may change the world. I am interested in working for a
-    fast-growing and challenging company that will encourage my growth and development, so as to be
-    the most efficient and effective employee I can possibly be.
+  description: A quick learner, and explorer, with a Science and Engineering background, who has a great interest in new technology that may change the world. I am interested in working for a fast-growing and challenging company that will encourage my growth and development, so as to be the most efficient and effective employee I can possibly be.
 
 # Contact Information
 contact:
@@ -21,8 +17,8 @@ contact:
   location: Hong Kong
   social:
     linkedin:
-      username: man-kit-michael-tse-4013a5176
-      url: https://www.linkedin.com/in/man-kit-michael-tse-4013a5176
+      username: man-kit-michael-tse
+      url: https://www.linkedin.com/in/man-kit-michael-tse
     github:
       username: michaeltmk
       url: https://github.com/michaeltmk
@@ -47,103 +43,137 @@ professional:
     - company: Cathay Pacific
       position: Solution Lead
       period: Dec 2024 - Present
-      description: >-
-        – Managed data or ML projects or applications which involved data ingestions, mlOps towards different
-        engineering teams or customers. Collaborated with data scientists to ensure the data and AI models
-        are scalable, maintainable, and secure.
-        – Leaded the Data Lake House (DLH) product development, a data platform that provides a unified
-        data storage and processing solution for structured, semi-structured, and unstructured data, enabling
-        efficient data management and analytics. It is used by various teams including data scientists, data
-        engineers, and business analysts.
-        – Designed and implemented data governance policies and best practices, ensuring data security, compli-
-        ance with industry standards, and alignment with business objectives.
-        – Collaborated with cross-functional teams to define and implement data governance policies and best
-        practices, ensuring data security and compliance with industry standards.
-        – Lead on the feature store development to provide a centralized dataset for data scientists for training
-        and inference of machine learning models. It is also integrated to vector database for vector search.
-        – Leaded on the team enhancement, including organized team training, knowledge sharing sessions.
-        – Leaded on the poc projects for streaming analysis, vector database and team infrastructure revamping.
-        – Acted as a bridge between business and technical teams, translating requirements between project
-        managers and software engineers.
-        – Skills: Data Lake House (DLH) strategy · Feature Store architecture · Vector database / semantic
-        search enablement · Enterprise data governance & compliance · Product roadmap & prioritization ·
-        Platform & MLOps enablement · Cross-functional stakeholder alignment · Change & risk management
+      description:
+        - Managed data or ML projects or applications which involved data ingestions, mlOps towards different engineering teams or customers. Collaborated with data scientists to ensure the data and AI models are scalable, maintainable, and secure.
+        - Leaded the Data Lake House (DLH) product development, a data platform that provides a unified data storage and processing solution for structured, semi-structured, and unstructured data, enabling efficient data management and analytics. It is used by various teams including data scientists, data engineers, and business analysts.
+        - Designed and implemented data governance policies and best practices, ensuring data security, compliance with industry standards, and alignment with business objectives.
+        - Collaborated with cross-functional teams to define and implement data governance policies and best practices, ensuring data security and compliance with industry standards.
+        - Lead on the feature store development to provide a centralized dataset for data scientists for training and inference of machine learning models. It is also integrated to vector database for vector search.
+        - Leaded on the team enhancement, including organized team training, knowledge sharing sessions.
+        - Leaded on the poc projects for streaming analysis, vector database and team infrastructure revamping.
+        - Acted as a bridge between business and technical teams, translating requirements between project managers and software engineers.
+      Skills: 
+        - Data Lake House (DLH) strategy
+        - Feature Store architecture
+        - Vector database / semantic search enablement
+        - Enterprise data governance & compliance
+        - Product roadmap & prioritization
+        - Platform & MLOps enablement
+        - Cross-functional stakeholder alignment
+        - Change & risk management
 
     - company: Cathay Pacific
       position: Solution Analyst
       period: Jan 2023 - Dec 2024
-      description: >-
-        – Integrated data ingestion pipeline into the existing data lake in AWS cloud, handling data explorations
-        and resolving technical issues among various teams, including data source, data governance, and data
-        scientist teams.
-        – Reviewed data scientists’ data and AI models for scalability, maintainability, and security, and deployed
-        them to cloud.
-        – Contributed to the team’s IT development practice, e.g. git branch management, and the CI/CD
-        pipeline.
-        – Managed end to end ML project / applications.
-        – Skills: Cloud Applications · Data Streaming · Data Modeling · pyspark · Airflow · AWS CDK · AWS ·
-        ELK
+      description:
+        - Integrated data ingestion pipeline into the existing data lake in AWS cloud, handling data explorations and resolving technical issues among various teams, including data source, data governance, and data scientist teams.
+        - Reviewed data scientists' data and AI models for scalability, maintainability, and security, and deployed them to cloud.
+        - Contributed to the team's IT development practice, e.g. git branch management, and the CI/CD pipeline.
+        - Managed end to end ML project / applications.
+      Skills:
+        - Cloud Applications
+        - Data Streaming
+        - Data Modeling
+        - pyspark
+        - Airflow
+        - AWS CDK
+        - AWS
+        - ELK
+
 
     - company: Varadise
-      position: Assistance Manager, Senior AI Robotic Engineer, Scrum Master
+      position: Assistance Manager, Scrum Master
       period: Oct 2022 - Jan 2023
-      description: >-
-        – Managed a cross-functional team of 11 professionals, fostering collaboration between technicians, project
-        managers, and senior software engineers, while working closely with business development, operations,
-        and marketing teams.
-        – Developed and scaled a data pipeline handling 9 million messages daily from 2000 data sources and
-        expanded data connectors for various sources and sinks, enhancing third-party integration.
-        – Implemented Agile Methodologies and maintained scrum practices while collaborating with stakeholders
-        to standardize data formats including time series and geometric data.
-        – Designed data analysis tools for addressing the construction industry needs, and acted as a bridge
-        between business and technical teams, translating requirements between project managers and software
-        engineers.
-        – Supervised machine learning projects in computer vision as well as overseeing the development of MLOps
-        and DevOps.
-        – Skills: Scrum · Agile Methodologies · Continuous Improvement · Business Analysis · Process Improve-
-        ment · Apache Kafka · MLOps · DevOps · Robot Operating System (ROS) · Python · Go-lang ·
-        Leadership · Problem Solving · Cooperation
+      description:
+        - Assisted the manager in leading a cross-functional team for developing AI, IoT, and data solutions for the construction industry.
+        - Coordinated between different departments to ensure project alignment with business goals and client requirements.
+        - Facilitated communication and collaboration among team members, stakeholders, and clients.
+        - Managed project timelines, resources, and deliverables to ensure successful project completion.
+        - Oversaw the architecture design and implementation of data pipelines and machine learning models.
+      Skills:
+        - Team Leadership
+
+    - company: Varadise
+      position: Senior AI Robotic Engineer, Scrum Master
+      period: Sep 2021 - Oct 2022
+      description:
+        - Managed a cross-functional team of 11 professionals, fostering collaboration between technicians, project managers, and senior software engineers, while working closely with business development, operations, and marketing teams.
+        - Developed and scaled a data pipeline handling 9 million messages daily from 2000 data sources and expanded data connectors for various sources and sinks, enhancing third-party integration.
+        - Implemented Agile Methodologies and maintained scrum practices while collaborating with stakeholders to standardize data formats including time series and geometric data.
+        - Designed data analysis tools for addressing the construction industry needs, and acted as a bridge between business and technical teams, translating requirements between project managers and software engineers.
+        - Supervised machine learning projects in computer vision as well as overseeing the development of MLOps and DevOps.
+      Skills:
+        - Scrum
+        - Agile Methodologies
+        - Continuous Improvement
+        - Business Analysis
+        - Process Improvement
+        - Apache Kafka
+        - MLOps
+        - DevOps
+        - Robot Operating System (ROS)
+        - Python
+        - Go-lang
+        - Leadership
+        - Problem Solving
+        - Cooperation
+
     - company: Varadise
       position: AI Robotic Engineer
       period: Mar 2021 - Sep 2021
-      description: >-
-        – Planned IoT-Hub, a data pipeline for IoT devices on a cloud based container infrastructure, including
-        a migration plan for existing devices, and a DB schema design from scratch.
-        – Developed IoT-Hub with multi-data source connectors, AWS RDS postgres with timeseries data opti-
-        mization and tableau.
-        – Skills: SQL · Azure Databricks · Project Planning · Tableau · AWS RDS · Apache Kafka · Time Series
-        Analysis · REST APIs · Mqtt · Data Pipelines · Machine Learning · Python
+      description:
+        - Planned IoT-Hub, a data pipeline for IoT devices on a cloud based container infrastructure, including a migration plan for existing devices, and a DB schema design from scratch.
+        - Developed IoT-Hub with multi-data source connectors, AWS RDS postgres with timeseries data optimization and tableau.
+      Skills:
+        - SQL
+        - Azure Databricks
+        - Project Planning
+        - Tableau
+        - AWS RDS
+        - Apache Kafka
+        - Time Series Analysis
+        - REST APIs
+        - Mqtt
+        - Data Pipelines
+        - Machine Learning
+        - Python
 
     - company: DreamsAi
       position: Data Engineer
       period: Jul 2020 - Mar 2021
-      description: >-
-        – Developed a card detection CNN model, which has almost reached the human baseline.
-        – Developed an email classification LSTM model, with a semi-autoML cycle that has labeling and auto-
-        retrain features.
-        – Been responsible for web scraping, data migration, server infrastructure, and networking setup.
-        – Managed the internal knowledge base including versioning, categorizing, and creating a welcome kit for
-        newcomers.
-        – Skills: Knowledge Management · Data Migration · Data Pipelines · Networking · PyTorch · Machine
-        Learning · Problem Solving · Python
+      description:
+        - Developed a card detection CNN model, which has almost reached the human baseline.
+        - Developed an email classification LSTM model, with a semi-autoML cycle that has labeling and auto-retrain features.
+        - Been responsible for web scraping, data migration, server infrastructure, and networking setup.
+        - Managed the internal knowledge base including versioning, categorizing, and creating a welcome kit for newcomers.
+      Skills:
+        - Knowledge Management
+        - Data Migration
+        - Data Pipelines
+        - Networking
+        - PyTorch
+        - Machine Learning
+        - Problem Solving
+        - Python
 
     - company: PTC International Limited
       position: Technical Support Engineer
       period: Apr 2017 - Jul 2020
-      description: >-
-        – Provided technical support, demonstration, documentation, and troubleshooting.
-        – Customized data-loggers with alarm function or dashboard etc. written in Python (Raspberry Pi,
-        Arduino, or any other programmable data-logger).Provided technical support, demonstration, docu-
-        mentation, and troubleshooting.
-        – Skills: Raspberry Pi · Arduino · Problem Solving · Python
+      description:
+        - Provided technical support, demonstration, documentation, and troubleshooting.
+        - Customized data-loggers with alarm function or dashboard etc. written in Python (Raspberry Pi, Arduino, or any other programmable data-logger). Provided technical support, demonstration, documentation, and troubleshooting.
+      Skills:
+        - Raspberry Pi
+        - Arduino
+        - Problem Solving
+        - Python
 
     - company: Earth Products China Limited
       position: Technical Engineer
-      period: Apr 2017 - Sep 2015
-      description: >-
-        – Provided technical support, demonstration, documentation, and troubleshooting.
-        – Responsible for developing new calibration methods for HOKLAS certification which involved experi-
-        mental studies and data analysis.
+      period: Sep 2015 - Apr 2017
+      description:
+        - Provided technical support, demonstration, documentation, and troubleshooting.
+        - Responsible for developing new calibration methods for HOKLAS certification which involved experimental studies and data analysis.
 
   additional_education:
     - institution: AWS
@@ -169,13 +199,11 @@ professional:
     - institution: Deeplearning.ai
       degree: Machine Learning Engineering for Production Specialization
       year: Jun 2021
-      description: Learnt how to deploy ML in production, such as data lifecycle, model pipeline and
-        deployment.
+      description: Learnt how to deploy ML in production, such as data lifecycle, model pipeline and deployment.
     - institution: Deeplearning.ai
       degree: Deep Learning Specialization
       year: Feb 2020
-      description: Practiced on CV, NLP, and Sequence Prediction using TensorFlow. Learnt to the concepts of
-        CNN, RNN/LSTM, dropout layer, batch normalization, learning rate adjustment etc.
+      description: Practiced on CV, NLP, and Sequence Prediction using TensorFlow. Learnt to the concepts of CNN, RNN/LSTM, dropout layer, batch normalization, learning rate adjustment etc.
     - institution: IBM
       degree: IBM AI Engineering Specialization
       year: Jun 2020
@@ -183,10 +211,10 @@ professional:
     - institution: IBM
       degree: IBM Data Science Specialization
       year: Mar 2020
-      description: >-
-        Understood the fundamental theories of data science. Learnt to use the IBM cloud, cloud programming,
-        SQL, pandas library, geojson data and beautiful soup package. Link to the capstone project: Analysis of
-        population and Venue distribution in Hong Kong.
+      description: "Understood the fundamental theories of data science. Learnt to use the IBM cloud, cloud programming, SQL, pandas library, geojson data and beautiful soup package."
+      link:
+        url: "https://www.linkedin.com/pulse/analysis-population-venue-distribution-hong-kong-man-kit-michael-tse/"
+        text: "Analysis of population and Venue distribution in Hong Kong"
     - institution: Deeplearning.ai
       degree: Deep Learning Specialization
       year: Feb 2020
@@ -194,10 +222,8 @@ professional:
     - institution: Deeplearning.ai
       degree: Introduction to TensorFlow for AI, ML, and DL Certificate
       year: Nov 2019
-      description: >-
-        Understood and Practiced object detection, face recognition, neural style transfer, language translation,
-        speech-to-text translation, ResNet, Inception, R-CNN, YOLO, CTC, optimizing metrics, dataset distribution
-        strategy, IoU, Bleu score.
+      description:
+        - Understood and Practiced object detection, face recognition, neural style transfer, language translation, speech-to-text translation, ResNet, Inception, R-CNN, YOLO, CTC, optimizing metrics, dataset distribution strategy, IoU, Bleu score.
 
 # AI Personality
 ai_personality:
@@ -283,10 +309,12 @@ skills:
 # Projects
 projects:
   - title: ASD Detection App
-    description: >-
-      An application that detect signs of autism spectrum disorder (ASD) in children based on their interactions with their parents and caregivers at home or in clinical settings.
-      Through AI glass, the app uses computer vision and natural language processing to analyze the child's behavior and provide feedback to parents and caregivers.
-      The project is in collaboration with medical professionals and researchers and tested with real world data.
+    start_date: "Jan 2025"
+    end_date:
+    description:
+      - An application that detect signs of autism spectrum disorder (ASD) in children based on their interactions with their parents and caregivers at home or in clinical settings.
+      - Through AI glass, the app uses computer vision and natural language processing to analyze the child's behavior and provide feedback to parents and caregivers.
+      - The project is in collaboration with medical professionals and researchers and tested with real world data.
     tech_stack:
       - Computer Vision
       - Natural Language Processing
@@ -298,6 +326,8 @@ projects:
       - src: /projects/asd-detection-home.png
         alt: ASD Detection homepage
   - title: ChatGPT Teaching Assistant
+    start_date: Jul 2023
+    end_date:
     description: A cloud based RAG LLM chatbot using ChatGPT model to teach students physics based on the lecture notes, videos, and pastpapers. It will only answer questions within the knowledge base and every answer will include referencing.
     tech_stack:
       - Microsoft Azure
@@ -312,8 +342,10 @@ projects:
       - src: /projects/chatgpt-teach-ass.jpeg
         alt: ChatGPT Teaching Assistant chat
   - title: Tx
-    description: >-
-      A Web3 project which provide a trustworthy, transparent and sustainable resale ticketing system with the use of NFT and encrypted on chain data.
+    start_date: Aug 2023
+    end_date:
+    description:
+      - A Web3 project which provide a trustworthy, transparent and sustainable resale ticketing system with the use of NFT and encrypted on chain data.
     tech_stack:
       - Solana blockchain
       - NFT
@@ -326,19 +358,23 @@ projects:
       - src: /projects/tx-home.png
         alt: Tx Ticketing homepage
   - title: Analysis of population and Venue distribution in Hong Kong
-    description: >-
-      Used K-means clustering to analyze the relationship between population and venue distribution in HK.
+    start_date:
+    end_date: "2020"
+    description:
+      - Used K-means clustering to analyze the relationship between population and venue distribution in HK.
     tech_stack:
       - Data Analysis
       - K-means Clustering
       - Matplotlib
     repo_url: https://github.com/michaeltmk/IBM-Data-Science-Capstone-Project
-    demo_url: null
+    demo_url: https://www.linkedin.com/pulse/analysis-population-venue-distribution-hong-kong-man-kit-michael-tse/
     images: []
   - title: OCR (captchas breaking)
-    description: >-
-      Demonstrated on computer vision aim with CNN, data argumentation techniques, written in Tensorflow.
-      Trained on captchas collected in web and a captchas simulator.
+    start_date: "2019"
+    end_date: "2020"
+    description:
+      - Demonstrated on computer vision aim with CNN, data argumentation techniques, written in Tensorflow.
+      - Trained on captchas collected in web and a captchas simulator.
     tech_stack:
       - Computer Vision
       - Convolutional Neural Networks (CNN)

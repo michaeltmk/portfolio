@@ -751,19 +751,12 @@ class PortfolioUpdater {
     if (extractedInfo.education && extractedInfo.education.length > 0) {
       updated.professional = updated.professional || {};
       
-      // Take the first (most recent) education item
-      const primaryEducation = extractedInfo.education[0];
-      
-      updated.professional.education = {
-        institution: primaryEducation.institution || 'Unknown Institution',
-        degree: primaryEducation.degree || 'Unknown Degree',
-        year: primaryEducation.year || 'Unknown Year'
-      };
-      
-      // Add all education items as additional info
-      if (extractedInfo.education.length > 1) {
-        updated.professional.additional_education = extractedInfo.education.slice(1);
-      }
+      // Update education as an array
+      updated.professional.education = extractedInfo.education.map(edu => ({
+        institution: edu.institution || 'Unknown Institution',
+        degree: edu.degree || 'Unknown Degree',
+        year: edu.year || 'Unknown Year'
+      }));
       
       updatedFields.push('education');
     }
@@ -776,6 +769,7 @@ class PortfolioUpdater {
         position: exp.position,
         period: exp.period,
         description: exp.description,
+        Skills: exp.Skills || [], // Handle Skills field
         responsibilities: exp.responsibilities
       }));
       updatedFields.push('experience');
