@@ -28,9 +28,17 @@ const ProjectContent = memo(({ project }: { project: ProjectProps }) => {
       {/* Header section with description */}
       <div className="rounded-3xl bg-[#F5F5F7] p-8 dark:bg-[#1D1D1F]">
         <div className="space-y-6">
-          <p className="text-secondary-foreground font-sans text-base leading-relaxed md:text-lg">
-            {projectData.description}
-          </p>
+          <div className="text-secondary-foreground font-sans text-base leading-relaxed md:text-lg">
+            {Array.isArray(projectData.description) ? (
+              <div className="space-y-2">
+                {projectData.description.map((desc: string, index: number) => (
+                  <p key={index}>{desc}</p>
+                ))}
+              </div>
+            ) : (
+              <p>{projectData.description}</p>
+            )}
+          </div>
 
           {/* Tech stack */}
           <div className="pt-4">

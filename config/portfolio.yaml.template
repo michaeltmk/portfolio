@@ -48,24 +48,45 @@ professional:
       position: "Senior Full Stack Developer"
       period: "Jan 2024 - Present"
       description: "Led development of scalable web applications using React, Node.js, and AWS. Implemented CI/CD pipelines and mentored junior developers. Built real-time analytics dashboard serving 10K+ users."
+      Skills:
+        - "React"
+        - "Node.js" 
+        - "AWS"
+        - "Leadership"
+        - "CI/CD"
     - company: "InnovateLab HK"
       position: "Frontend Developer"
       period: "Jun 2022 - Dec 2023"
       description: "Developed responsive web applications for fintech clients. Collaborated with UX designers to implement pixel-perfect designs. Optimized application performance resulting in 40% faster load times."
+      Skills:
+        - "React"
+        - "TypeScript"
+        - "Performance Optimization"
+        - "UI/UX"
     - company: "Digital Craft Agency"
       position: "Junior Web Developer"
       period: "Jan 2022 - May 2022"
       description: "Built custom WordPress themes and plugins. Created interactive web experiences for e-commerce clients using modern JavaScript frameworks."
+      Skills:
+        - "WordPress"
+        - "JavaScript"
+        - "PHP"
 
   additional_education:
     - institution: "AWS"
       degree: "Certified Solutions Architect - Associate"
       year: "2024"
       description: "Validated expertise in designing distributed systems on AWS cloud platform."
+      link:
+        url: "https://aws.amazon.com/certification/certified-solutions-architect-associate/"
+        text: "View Certification Details"
     - institution: "MongoDB University"
       degree: "MongoDB Developer Certification"
       year: "2023"
       description: "Demonstrated proficiency in MongoDB database design and operations."
+      link:
+        url: "https://university.mongodb.com/"
+        text: "MongoDB University"
 
 # AI Personality
 ai_personality:
@@ -152,6 +173,8 @@ skills: # (categories can be customized)
 # Projects
 projects:
   - title: "AI-Powered Task Manager"
+    start_date: "Jan 2024"
+    end_date: "Jun 2024"
     description: "Smart productivity app with natural language processing for task organization and priority management. Features real-time collaboration and intelligent deadline suggestions."
     tech_stack: ["Next.js", "TypeScript", "OpenAI API", "Prisma", "PostgreSQL", "Tailwind CSS"]
     demo_url: "https://taskmaster-ai.vercel.app"
@@ -161,6 +184,8 @@ projects:
         alt: "TaskMaster AI homepage"
   
   - title: "Real-time Analytics Dashboard"
+    start_date: "Sep 2023"
+    end_date: "Dec 2023"
     description: "Comprehensive analytics platform for e-commerce businesses with real-time data visualization, custom report generation, and predictive analytics."
     tech_stack: ["React", "D3.js", "Node.js", "MongoDB", "Socket.io", "AWS"]
     demo_url: "https://analytics-pro-demo.com"
@@ -170,6 +195,8 @@ projects:
         alt: "Analytics dashboard interface"
   
   - title: "Blockchain Voting System"
+    start_date: "Mar 2023"
+    end_date: "Aug 2023"
     description: "Secure and transparent voting platform built on Ethereum blockchain with smart contracts for election management and vote verification."
     tech_stack: ["Solidity", "Web3.js", "React", "Hardhat", "IPFS", "MetaMask"]
     demo_url: "https://blockvote-demo.netlify.app"
@@ -179,9 +206,11 @@ projects:
         alt: "Blockchain voting interface"
   
   - title: "Social Media Aggregator"
+    start_date: "Nov 2022"
+    end_date: "Feb 2023"
     description: "Cross-platform social media management tool with content scheduling, analytics tracking, and AI-powered content suggestions."
     tech_stack: ["Vue.js", "Python", "FastAPI", "Redis", "PostgreSQL", "Docker"]
-    demo_url: "#"
+    demo_url: null
     repo_url: "https://github.com/michaeltmk/social-aggregator"
     images:
       - src: "/projects/social-aggregator.png"

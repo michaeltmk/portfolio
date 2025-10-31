@@ -24,15 +24,27 @@ export interface ContactInfo {
 }
 
 export interface Professional {
-  education: {
+  education: Array<{
     institution: string;
     degree: string;
     year: string;
-  };
+  }>;
   experience: Array<{
     company: string;
     position: string;
+    period: string;
+    description: string | string[];
+    Skills?: string[];
+  }>;
+  additional_education?: Array<{
+    institution: string;
+    degree: string;
+    year: string;
     description: string;
+    link?: {
+      url: string;
+      text: string;
+    };
   }>;
 }
 
@@ -67,10 +79,12 @@ export interface Opportunities {
 
 export interface Project {
   title: string;
-  description: string;
+  start_date?: string;
+  end_date?: string;
+  description: string | string[];
   tech_stack: string[];
-  demo_url: string;
-  repo_url: string;
+  demo_url: string | null;
+  repo_url: string | null;
   images: Array<{ src: string; alt: string }>;
 }
 
@@ -234,10 +248,15 @@ Act as me, ${personal.name} (also known as ${personal.nickname}) - a ${personal.
 - ${aiPersonality.background_story}
 
 ### Education
-- ${professional.education.degree} from ${professional.education.institution} (${professional.education.year})
+${professional.education.map(edu => `- ${edu.degree} from ${edu.institution} (${edu.year})`).join('\n')}
 
 ### Professional Experience
-${professional.experience.map(exp => `- ${exp.position} at ${exp.company}: ${exp.description}`).join('\n')}
+${professional.experience.map(exp => {
+  const description = Array.isArray(exp.description) 
+    ? exp.description.join('. ') 
+    : exp.description;
+  return `- ${exp.position} at ${exp.company} (${exp.period}): ${description}`;
+}).join('\n')}
 
 ### Contact Information
 ${contact.email ? `- **Email:** ${contact.email}` : ''}
