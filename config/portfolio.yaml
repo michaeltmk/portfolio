@@ -271,7 +271,7 @@ skills:
     - databricks
     - NGINX
   ml_technical_skills:
-    - SageMaker MLOps
+    - MLOps
     - ScikitLearn
     - TensorFlow
     - Keras
@@ -331,7 +331,7 @@ projects:
         alt: ASD Detection homepage
   - title: ChatGPT Teaching Assistant
     start_date: Jul 2023
-    end_date:
+    end_date: Sep 2025
     description: A cloud based RAG LLM chatbot using ChatGPT model to teach students physics based on the lecture notes, videos, and pastpapers. It will only answer questions within the knowledge base and every answer will include referencing.
     tech_stack:
       - Microsoft Azure
