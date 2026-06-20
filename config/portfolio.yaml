@@ -7,7 +7,7 @@ personal:
   nickname: Mike
   # age: 25 years old
   location: Hong Kong
-  title: Solution Lead
+  title: Full-Stack Solutions Architect
   description: A quick learner, and explorer, with a Science and Engineering background, who has a great interest in new technology that may change the world. I am interested in working for a fast-growing and challenging company that will encourage my growth and development, so as to be the most efficient and effective employee I can possibly be.
 
 # Contact Information
@@ -41,7 +41,7 @@ professional:
 
   experience:
     - company: Cathay Pacific
-      position: Solution Lead
+      position: Full-Stack Solutions Architect
       period: Dec 2024 - Present
       description:
         - Spearheaded the enterprise-wide adoption of Generative AI tools, including driving developer productivity via AI-assisted coding and leading the development of autonomous monitoring agents for production oversight.
@@ -390,7 +390,7 @@ projects:
 # Resume
 resume:
   title: Michael's Resume
-  description: Solution Lead
+  description: Full-Stack Solutions Architect
   file_type: PDF
   last_updated: June 2026
   file_size: 0.2 MB
@@ -440,7 +440,7 @@ assets:
 # Site Configuration
 site:
   name: Michael Tse - Portfolio
-  title: Solution Lead Portfolio
+  title: Full-Stack Solutions Architect Portfolio
   description: Modern portfolio showcasing full-stack development projects and AI integrations
   url: https://your-portfolio.com
   author: Michael Tse
